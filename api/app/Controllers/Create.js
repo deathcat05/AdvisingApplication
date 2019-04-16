@@ -1,5 +1,6 @@
 const dbConnection = require('../../database/mySQLconnect');
 const sha1 = require('sha1');
+const moment = require('moment')
 
 
 require('dotenv').config();
@@ -8,15 +9,10 @@ class Create {
 
     constructor() {}
 
-    async createSession(
+    static async createSession(
         advisor_id /*Number*/, 
         duration /*Number*/, 
         start_time, /*String from Datetime*/) {
-        /*
-insert into AdvisingSession 
-	(advisor_id, , duration,start_time, lookup_key)
-VALUES
-        */
        return new Promise((resolve, reject) => {
             const sql = `
                 INSERT INTO AdvisingSession 
@@ -24,23 +20,68 @@ VALUES
                 VALUES
                     (?, ?, ?, ?)`
             dbConnection.query({ sql, values: [ advisor_id, duration, start_time, sha1(`${advisor_id}${start_time}`) ] }, err => {
-                if (err)
+                if (err) {
+                    console.log("err")
+                    console.log(err)
                     return reject()
+                }
                 return resolve()
             })
             
        })
-
     }
 
-    async createBlock(ctx) {
-        return 
-    }
-
-    async createAdvisor(ctx) {
-
+    static async createBlock({
+        advisor_id,
+        start_day,
+        session_length,
+        num_sessions_in_day
+    }) {
         return new Promise((resolve, reject) => {
-            
+            const sql = `
+                INSERT INTO AdvisingBlock
+                    (advisor_id, is_deleted, start_day, session_length, num_sessions_in_day)
+                VALUES
+                    (?, ?, ?, ?, ?)`
+            dbConnection.query({ sql, values: [ advisor_id, false, start_day, session_length, num_sessions_in_day ]}, err => {
+                if (err)
+                    return reject('createBlock error')
+                return resolve()
+            })
+        })
+    }
+
+    blockHandler(ctx, next) {
+        console.log(this)
+        console.log("Create Block")
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                const dateFormat = 'YYYY-MM-DD hh:mm:ss'
+                let { request: { body } } = ctx
+                let { advisor_id, start_day, session_length, num_sessions_in_day } = body 
+                await Create.createBlock(body)
+
+                for ( let i = 0; i < num_sessions_in_day; i++ ) {
+                    const start_time = moment(start_day, dateFormat).add(session_length * i, 'minutes').format(dateFormat)
+                    await Create.createSession(advisor_id, session_length, start_time)
+                }
+                console.log("success")
+                ctx.body = { "success": true }
+                ctx.status = 200
+                return resolve();
+
+            } catch (e) {
+                console.log("reject")
+                console.log(e)
+                ctx.body = { "success": false }
+                return reject(e);
+            }
+        })
+    }
+
+    createAdvisor(ctx) {
+        return new Promise((resolve, reject) => {
             let { request: { body } } = ctx
 
             const query = `
@@ -54,6 +95,7 @@ VALUES
                 values: Object.keys(body).map(k => body[k])
             }, (error, tuples) => {
                 if (error) {
+                    console.log(error)
                     return reject ("Error In createAdvisor")
                 }
                 ctx.body = { "success": true, ...tuples }

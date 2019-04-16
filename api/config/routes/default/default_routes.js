@@ -9,7 +9,7 @@ const router = require('koa-router')({
 
 router
   .get('/', ctx => ctx.body = 'Hello Thomas')
-  .post('/createBlock', CreateController.createBlock)
+  .post('/createBlock', CreateController.blockHandler)
   .post('/createAdvisor', CreateController.createAdvisor)
   .post('/createAdvisee', CreateController.createAdvisee)
 
