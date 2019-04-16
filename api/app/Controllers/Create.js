@@ -1,13 +1,14 @@
 const dbConnection = require('../../database/mySQLconnect');
+const GenericSQL = require('./GenericSQL')
 const sha1 = require('sha1');
 const moment = require('moment')
 
 
 require('dotenv').config();
 
-class Create {
+class Create extends GenericSQL {
 
-    constructor() {}
+    constructor() { super() }
 
     static async createSession(
         advisor_id /*Number*/, 
@@ -30,6 +31,34 @@ class Create {
             
        })
     }
+
+    // static async createSession(
+    //     advisor_id, /* Number */
+    //     duration,   /* Number */
+    //     start_time, /* String / DateTime */
+    // ) {
+    //     const data = {
+    //         tableName: 'AdvisingSession',
+    //         argumentNameList: ['advisor_id', 'duration', 'start_time', 'lookup_key'],
+    //         values: [ ...arguments, sha1(`${advisor_id}${start_time}`) ]
+    //     }
+    //     return await GenericSQL.genericInsert(data)
+    // }
+
+    // static async createBlock({
+    //     advisor_id,         /* Number */
+    //     start_day,          /* String / DateTime */
+    //     session_length,     /* Number */
+    //     num_sessions_in_day /* Number */
+    // }) {
+    //     const data = {
+    //         tableName: 'AdvisingBlock',
+    //         argumentNameList: ['advisor_id', 'start_day', 'session_length', 'num_sessions_in_day'],
+    //         values: [...arguments]
+    //     }
+    //     console.log(data)
+    //     return await GenericSQL.genericInsert(data)
+    // }
 
     static async createBlock({
         advisor_id,
