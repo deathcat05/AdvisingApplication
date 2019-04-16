@@ -53,3 +53,8 @@ module.exports = GenericSQL
 // }
 
 // foo (1, 2, 3, 4)
+
+// INSERT INTO AdvisingBlock 
+//     ( advisor_id, start_day, session_length, num_sessions_in_day )   
+// VALUES                    
+// ( `advisor_id` = 12345, `start_day` = '2019-04-01 10:00:00', `session_length` = 20, `num_sessions_in_day` = 10 )
