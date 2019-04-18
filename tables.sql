@@ -1,5 +1,7 @@
 use cs386_nkamm;
 
+
+
 drop table if exists AdvisingSession;
 drop table if exists AdvisingBlock;
 drop table if exists Advisee;
