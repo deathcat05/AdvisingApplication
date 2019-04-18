@@ -54,38 +54,28 @@ class SignIn extends Component {
         isAdvisor: false,
         password: "",
         id: ""
-
     }
 
     handleSwitch = (event) => {
-        console.log(event)
+
         let { isAdvisor } = this.state 
         this.setState({ isAdvisor: !isAdvisor })
         event.stopPropagation()
-
-        console.log(this.state)
     }
 
     contactServer = async (event) => {
 
         let { id, password, isAdvisor } = this.state 
 
-        if (id === "" || password === "")
+        if (!id || !password ) {
             return 
-
-        let config = {
-            headers: {
-                'Access-Control-Allow-Origin': 'http://localhost:3000',
-                'Access-Control-Allow-Credentials': 'true'
-            }
         }
 
-
-        axios.post(`http://blue.cs.sonoma.edu:60000/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
+        axios.post(`http://localhost:8239/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
             student_id: parseInt(id),
             advisor_id: parseInt(id),
             h_password: password
-        }, config).then(result => console.log(result))
+        }).then(result => console.log(result))
 
         event.preventDefault()
 
