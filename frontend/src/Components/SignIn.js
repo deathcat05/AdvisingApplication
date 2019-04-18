@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import jwtDecode from 'jwt-decode'
+
 
 import axios from 'axios'
 
@@ -15,8 +18,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Switch from '@material-ui/core/Switch';
-
+import { setAuthorizationToken, setCurrentUser } from '../store/actions/auth';
 
 const styles = theme => ({
   main: {
@@ -56,40 +58,41 @@ class SignIn extends Component {
         isAdvisor: false,
         password: "",
         id: ""
-
     }
 
     handleSwitch = (event) => {
-        console.log(event)
+
         let { isAdvisor } = this.state 
         this.setState({ isAdvisor: !isAdvisor })
         event.stopPropagation()
-
-        console.log(this.state)
     }
 
     contactServer = async (event) => {
 
+        event.preventDefault()
+
+        console.log("Contact Server")
+        console.log(this.props)
+
         let { id, password, isAdvisor } = this.state 
 
-        if (id === "" || password === "")
+        if (!id || !password ) {
             return 
-
-        let config = {
-            headers: {
-                'Access-Control-Allow-Origin': 'http://localhost:3000',
-                'Access-Control-Allow-Credentials': 'true'
-            }
         }
 
-
-        axios.post(`http://blue.cs.sonoma.edu:60000/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
+        const { data } = await axios.post(`http://localhost:8239/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
             student_id: parseInt(id),
             advisor_id: parseInt(id),
             h_password: password
-        }, config).then(result => console.log(result))
+        });
 
-        event.preventDefault()
+        let { success } = data;
+        if ( success ) {
+            let { jwt } = data
+            localStorage.setItem("jwtToken", jwt)
+            setAuthorizationToken(jwt)
+            setCurrentUser( jwtDecode(localStorage.jwtToken) )
+        }
 
     }
 
@@ -135,7 +138,7 @@ class SignIn extends Component {
                     />
                 </FormControl>
                 <FormControlLabel
-                    control={<Switch value="remember" color="primary" />}
+                    control={<Checkbox value="remember" color="primary" />}
                     onClick={this.handleSwitch}
                     label="Advisor"
                 />
@@ -160,53 +163,5 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
-
-// import React from 'react';
-// import FormGroup from '@material-ui/core/FormGroup';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Switch from '@material-ui/core/Switch';
-//
-// class SwitchLabels extends React.Component {
-//     state = {
-//         checkedA: true,
-//         checkedB: true,
-//     };
-//
-//     handleChange = name => event => {
-//         this.setState({ [name]: event.target.checked });
-//     };
-//
-//     render() {
-//         return (
-//             <FormGroup row>
-//         <FormControlLabel
-//         control={
-//             <Switch
-//         checked={this.state.checkedA}
-//         onChange={this.handleChange('checkedA')}
-//         value="checkedA"
-//             />
-//     }
-//         label="Secondary"
-//             />
-//             <FormControlLabel
-//         control={
-//             <Switch
-//         checked={this.state.checkedB}
-//         onChange={this.handleChange('checkedB')}
-//         value="checkedB"
-//         color="primary"
-//             />
-//     }
-//         label="Primary"
-//             />
-//             <FormControlLabel control={<Switch value="checkedC" />} label="Uncontrolled" />
-//             <FormControlLabel disabled control={<Switch value="checkedD" />} label="Disabled" />
-//             <FormControlLabel disabled control={<Switch checked value="checkedE" />} label="Disabled" />
-//             </FormGroup>
-//     );
-//     }
-// }
-//
-// export default SwitchLabels;
+//We need dispatch
+export default connect(state => ({}), { setCurrentUser })(withStyles(styles)(SignIn));
