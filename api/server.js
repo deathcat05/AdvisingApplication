@@ -4,7 +4,7 @@ const app = new Koa();
 const bodyParser = require('koa-bodyparser');
 app.use(bodyParser());
 const http = require('http');
-const API_PORT = 8239
+const API_PORT = 8000;
 
 require('./config/routes.js')(app);
 
