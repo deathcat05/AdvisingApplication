@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import jwtDecode from 'jwt-decode'
+
 
 import axios from 'axios'
 
@@ -15,6 +18,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { setAuthorizationToken, setCurrentUser } from '../store/actions/auth';
 
 const styles = theme => ({
   main: {
@@ -65,19 +69,30 @@ class SignIn extends Component {
 
     contactServer = async (event) => {
 
+        event.preventDefault()
+
+        console.log("Contact Server")
+        console.log(this.props)
+
         let { id, password, isAdvisor } = this.state 
 
         if (!id || !password ) {
             return 
         }
 
-        axios.post(`http://localhost:8239/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
+        const { data } = await axios.post(`http://localhost:8239/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
             student_id: parseInt(id),
             advisor_id: parseInt(id),
             h_password: password
-        }).then(result => console.log(result))
+        });
 
-        event.preventDefault()
+        let { success } = data;
+        if ( success ) {
+            let { jwt } = data
+            localStorage.setItem("jwtToken", jwt)
+            setAuthorizationToken(jwt)
+            setCurrentUser( jwtDecode(localStorage.jwtToken) )
+        }
 
     }
 
@@ -148,4 +163,5 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+//We need dispatch
+export default connect(state => ({}), { setCurrentUser })(withStyles(styles)(SignIn));
