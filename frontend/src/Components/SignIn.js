@@ -138,7 +138,7 @@ class SignIn extends Component {
                     />
                 </FormControl>
                 <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
+                    control={<Switch value="remember" color="primary" />}
                     onClick={this.handleSwitch}
                     label="Advisor"
                 />
