@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import jwtDecode from 'jwt-decode'
-
 
 import axios from 'axios'
 
@@ -11,14 +8,14 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+//import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { setAuthorizationToken, setCurrentUser } from '../store/actions/auth';
+import Switch from '@material-ui/core/Switch';
 
 const styles = theme => ({
   main: {
@@ -58,41 +55,40 @@ class SignIn extends Component {
         isAdvisor: false,
         password: "",
         id: ""
-    }
+
+    };
 
     handleSwitch = (event) => {
-
+        console.log(event)
         let { isAdvisor } = this.state 
         this.setState({ isAdvisor: !isAdvisor })
         event.stopPropagation()
-    }
+
+        console.log(this.state)
+    };
 
     contactServer = async (event) => {
 
-        event.preventDefault()
-
-        console.log("Contact Server")
-        console.log(this.props)
-
         let { id, password, isAdvisor } = this.state 
 
-        if (!id || !password ) {
+        if (id === "" || password === "")
             return 
+
+        let config = {
+            headers: {
+                'Access-Control-Allow-Origin': 'http://localhost:8000',
+                'Access-Control-Allow-Credentials': 'true'
+            }
         }
 
-        const { data } = await axios.post(`http://localhost:8239/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
+
+        axios.post(`http://blue.cs.sonoma.edu:60000/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
             student_id: parseInt(id),
             advisor_id: parseInt(id),
             h_password: password
-        });
+        }, config).then(result => console.log(result))
 
-        let { success } = data;
-        if ( success ) {
-            let { jwt } = data
-            localStorage.setItem("jwtToken", jwt)
-            setAuthorizationToken(jwt)
-            setCurrentUser( jwtDecode(localStorage.jwtToken) )
-        }
+        event.preventDefault()
 
     }
 
@@ -140,7 +136,7 @@ class SignIn extends Component {
                 <FormControlLabel
                     control={<Switch value="remember" color="primary" />}
                     onClick={this.handleSwitch}
-                    label="Advisor"
+                    label={this.state.isAdvisor ? "Student":"Advisor"}
                 />
                 <Button
                     type="submit"
@@ -163,5 +159,5 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-//We need dispatch
-export default connect(state => ({}), { setCurrentUser })(withStyles(styles)(SignIn));
+export default withStyles(styles)(SignIn);
+
