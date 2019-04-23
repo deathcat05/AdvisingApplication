@@ -16,6 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Switch from '@material-ui/core/Switch';
+import AccountCircleTwoTone from '@material-ui/icons/AccountCircleTwoTone';
 
 const styles = theme => ({
     main: {
@@ -54,7 +55,9 @@ class Register extends Component {
     state = {
         isAdvisor: false,
         password: "",
-        id: ""
+        confirm_password: "",
+        id: "",
+        confirm_id: ""
 
     };
 
@@ -100,10 +103,10 @@ class Register extends Component {
             <CssBaseline />
             <Paper className={classes.paper}>
             <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+            <AccountCircleTwoTone />
             </Avatar>
             <Typography component="h1" variant="h5">
-            {this.state.isAdvisor ? "Advisor": "Advisee"} Sign in
+            {this.state.isAdvisor ? "Advisor": "Advisee"} Register
         </Typography>
         <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
@@ -114,10 +117,16 @@ class Register extends Component {
         <Input
         id="ID"
         name="ID"
-        autoComplete="ID"
+        value = {this.state.ID}
+        onChange={event => this.setState({ID: event.target.value})}
+        />
+        <Input
+        placeholder="CONFIRM ID"
+        id="confirm_ID"
+        name="confirm_ID"
         autoFocus
-        value = {this.state.id}
-        onChange={event => this.setState({id: event.target.value})}
+        value = {this.state.confirm_id}
+        onChange={event => this.setState({confirm_id: event.target.value})}
         />
         </FormControl>
         <FormControl margin="normal" required fullWidth>
@@ -128,9 +137,18 @@ class Register extends Component {
         name="password"
         type="password"
         id="password"
-        autoComplete="current-password"
-        value={this.state.password}
         onChange={event => this.setState({ password: event.target.value })}
+        />
+        </FormControl>
+        <FormControl margin="normal" required fullWidth>
+        <Input
+        placeholder="CONFIRM PASSWORD"
+        name="confirm_password"
+        type="password"
+        id="confirm_password"
+        value={this.state.confirm_password}
+        onChange={event => this.setState({ confirm_password: event.target.value })}
+
         />
         </FormControl>
         <FormControlLabel
@@ -139,6 +157,7 @@ class Register extends Component {
         label={this.state.isAdvisor ? "Student":"Advisor"}
         />
         <Button
+        disabled={this.state.ID != this.state.confirm_id || this.state.password != this.state.confirm_password ? true : false}
         type="submit"
         fullWidth
         variant="contained"

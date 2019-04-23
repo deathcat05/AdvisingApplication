@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import SignIn from './Components/SignIn'
+import Register from './Components/Register'
 
 import { Provider } from 'react-redux'
 // import { configureStore } from './store'
@@ -38,6 +39,7 @@ class App extends Component {
         <Router>
           <Switch>
               <Route exact path="/" component={SignIn} />
+              <Route exact path="/register" component={Register} />
           </Switch>
         </Router>
       </Provider>
