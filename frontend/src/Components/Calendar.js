@@ -10,7 +10,8 @@ const localizer = BigCalendar.momentLocalizer(moment)
 
 class CalendarComponent extends Component {
   state = {
-    events: []
+    events: [],
+    selected: {}
   };
 
   async componentWillMount() {
@@ -55,7 +56,10 @@ class CalendarComponent extends Component {
         events={this.state.events}
         startAccessor="start_time"
         endAccessor="end_time"
+        resourceAccessor="lookup_key"
         style={{height: '100vh'}}
+        onSelectEvent={event => console.log(event)}
+        // selected={this.state.selected}
     />
       </div>
     );
