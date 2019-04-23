@@ -14,19 +14,25 @@ function foo(ctx) {
   return new Promise((resolve, reject) => {
 
     let { advisor } = ctx.params 
-    // console.log(`Advisor: ${advisor}`)
-    // console.log(ctx.params)
-    //return resolve();
-    // const sql = `
-    //   SELECT * FROM AdvisingSession
-    //   WHERE advisor_id = ?
-    //   LIMIT 100`
-    // console.log("starting")
+
     const sql = `
-      SELECT * from AdvisingSession 
-      WHERE advisor_id = ?`;
+      SELECT 
+        a.first_name,
+        a.last_name,
+        a.email,
+        a.lock_time,
+        ab.session_length,
+        ads.start_time,
+        ads.approved,
+        ads.booked
+        FROM Advisor a
+        LEFT JOIN AdvisingBlock ab ON
+          a.advisor_id = ab.advisor_id 
+        LEFT JOIN AdvisingSession ads ON 
+          ab.advisor_id = ads.advisor_id
+        WHERE a.advisor_id = ? AND ads.start_time < NOW()
+          ORDER BY ads.start_time ASC ;`;
     dbConnection.query({ sql, values: [ advisor ] }, (err, result) => {
-      console.log("inside")
       if (err) {
           console.log("err")
           console.log(err)
