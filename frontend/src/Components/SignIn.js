@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+//import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -136,7 +136,7 @@ class SignIn extends Component {
                 <FormControlLabel
                     control={<Switch value="remember" color="primary" />}
                     onClick={this.handleSwitch}
-                    label="Advisor"
+                    label={this.state.isAdvisor ? "Student":"Advisor"}
                 />
                 <Button
                     type="submit"
