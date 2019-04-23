@@ -14,14 +14,14 @@ function foo(ctx) {
   return new Promise((resolve, reject) => {
 
     let { advisor } = ctx.params 
-    console.log(`Advisor: ${advisor}`)
+    // console.log(`Advisor: ${advisor}`)
     // console.log(ctx.params)
     //return resolve();
     // const sql = `
     //   SELECT * FROM AdvisingSession
     //   WHERE advisor_id = ?
     //   LIMIT 100`
-    console.log("starting")
+    // console.log("starting")
     const sql = `
       SELECT * from AdvisingSession 
       WHERE advisor_id = ?`;
@@ -32,6 +32,8 @@ function foo(ctx) {
           console.log(err)
           return reject()
       }
+      // console.log("result is")
+      // console.log(result)
       ctx.body = result;
       return resolve()
     })
