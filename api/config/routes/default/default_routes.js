@@ -13,8 +13,8 @@ const router = require('koa-router')({
 function foo(ctx) {
   return new Promise((resolve, reject) => {
 
-    // let { advisor } = ctx.params 
-    // console.log(`Advisor: ${advisor}`)
+    let { advisor } = ctx.params 
+    console.log(`Advisor: ${advisor}`)
     // console.log(ctx.params)
     //return resolve();
     // const sql = `
@@ -22,8 +22,10 @@ function foo(ctx) {
     //   WHERE advisor_id = ?
     //   LIMIT 100`
     console.log("starting")
-    const sql = `SELECT * from AdvisingSession`;
-    dbConnection.query({ sql }, (err, result) => {
+    const sql = `
+      SELECT * from AdvisingSession 
+      WHERE advisor_id = ?`;
+    dbConnection.query({ sql, values: [ advisor ] }, (err, result) => {
       console.log("inside")
       if (err) {
           console.log("err")
