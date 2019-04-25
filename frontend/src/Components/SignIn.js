@@ -121,13 +121,14 @@ class SignIn extends Component {
                     />
                 </FormControl>
                 <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="password">
+                    <InputLabel htmlFor="password" borderColor="primary">
                         Password
                     </InputLabel>
                     <Input 
                         name="password" 
                         type="password" 
-                        id="password" 
+                        id="password"
+                        autoFocus
                         autoComplete="current-password" 
                         value={this.state.password}
                         onChange={event => this.setState({ password: event.target.value })}
@@ -149,6 +150,14 @@ class SignIn extends Component {
                     Sign in
                 </Button>
                 </form>
+                    <br/>
+                <a
+                    href="/register"
+                   color="secondary"
+                   >
+                        New User?
+                </a>
+
             </Paper>
             </main>
         );

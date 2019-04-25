@@ -197,6 +197,14 @@ class Register extends Component {
             Register
             </Button>
             </form>
+                <br/>
+                <a
+                    href="/"
+                    color="secondary"
+                >
+                    Back to Login
+                </a>
+
             </Paper>
             </main>
     );
