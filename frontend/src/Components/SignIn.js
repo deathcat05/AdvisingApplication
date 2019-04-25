@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 
 import axios from 'axios'
+import { connect } from 'react-redux'
+
+import {
+    setCurrentUser,
+    setAuthorizationToken
+} from '../store/actions/auth'
+
+import jwtDecode from 'jwt-decode'
 
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
@@ -8,7 +16,6 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -63,8 +70,6 @@ class SignIn extends Component {
         let { isAdvisor } = this.state 
         this.setState({ isAdvisor: !isAdvisor })
         event.stopPropagation()
-
-        console.log(this.state)
     };
 
     contactServer = async (event) => {
@@ -74,19 +79,22 @@ class SignIn extends Component {
         if (id === "" || password === "")
             return 
 
-        let config = {
-            headers: {
-                'Access-Control-Allow-Origin': 'http://localhost:8000',
-                'Access-Control-Allow-Credentials': 'true'
-            }
-        }
-
-
-        axios.post(`http://blue.cs.sonoma.edu:60000/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
+        axios.post(`http://localhost:8239/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
             student_id: parseInt(id),
             advisor_id: parseInt(id),
             h_password: password
-        }, config).then(result => console.log(result))
+        }).then(({ data }) => {
+            
+            let { success, jwt } = data
+
+            if ( success ) {
+                localStorage.setItem("jwtToken", jwt)
+
+                let user = jwtDecode(jwt)
+                setAuthorizationToken(jwt)
+                this.props.setCurrentUser( user )
+            }
+        })
 
         event.preventDefault()
 
@@ -136,7 +144,7 @@ class SignIn extends Component {
                 <FormControlLabel
                     control={<Switch value="remember" color="primary" />}
                     onClick={this.handleSwitch}
-                    label={this.state.isAdvisor ? "Student" : "Advisor"}
+                    label={this.state.isAdvisor ? "Advisor" : "Student"}
                 />
                 <Button
                     type="submit"
@@ -159,5 +167,5 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
 
+export default connect(() => ({}), { setCurrentUser })(withStyles(styles)(SignIn))
