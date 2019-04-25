@@ -17,21 +17,22 @@ function foo(ctx) {
 
     const sql = `
       SELECT 
-        a.first_name,
-        a.last_name,
-        a.email,
-        a.lock_time,
-        ab.session_length,
-        ads.start_time,
-        ads.approved,
-        ads.booked
-        FROM Advisor a
-        LEFT JOIN AdvisingBlock ab ON
-          a.advisor_id = ab.advisor_id 
-        LEFT JOIN AdvisingSession ads ON 
-          ab.advisor_id = ads.advisor_id
-        WHERE a.advisor_id = ? AND ads.start_time < NOW()
-          ORDER BY ads.start_time ASC ;`;
+      a.first_name,
+      a.last_name,
+      a.email,
+      a.lock_time,
+      ab.session_length,
+      ads.start_time,
+      ads.approved,
+      ads.booked,
+      ads.lookup_key
+      FROM Advisor a
+      LEFT JOIN AdvisingBlock ab ON
+        a.advisor_id = ab.advisor_id 
+      LEFT JOIN AdvisingSession ads ON 
+        ab.advisor_id = ads.advisor_id
+      WHERE a.advisor_id = ? AND ads.start_time < NOW()
+        ORDER BY ads.start_time ASC `;
     dbConnection.query({ sql, values: [ advisor ] }, (err, result) => {
       if (err) {
           console.log("err")
@@ -45,6 +46,7 @@ function foo(ctx) {
     })
   });
 }
+
 
 function book(ctx) {
   
@@ -106,3 +108,4 @@ router
   .post('/advisingSession/book', book)
 
 module.exports = router
+
