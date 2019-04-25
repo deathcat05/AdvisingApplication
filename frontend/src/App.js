@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
 import SignIn from './Components/SignIn'
+import SignUpCalendar from './Components/Calendar'
 import Register from './Components/Register'
 
 import { Provider } from 'react-redux'
-// import { configureStore } from './store'
 import store from './store'
 
 
@@ -23,6 +23,8 @@ import {
 
 // const store = configureStore()
 
+// setInterval(() => console.log(store.getState()), 5000);
+
 if (localStorage.jwtToken) {
   setAuthorizationToken(localStorage.jwtToken)
   try {
@@ -32,6 +34,7 @@ if (localStorage.jwtToken) {
   }
 }
 
+
 class App extends Component {
   render() {
     return (
@@ -39,6 +42,7 @@ class App extends Component {
         <Router>
           <Switch>
               <Route exact path="/" component={SignIn} />
+              <Route exact path="/signUpCalendar" component={SignUpCalendar} />
               <Route exact path="/register" component={Register} />
           </Switch>
         </Router>

@@ -14,31 +14,84 @@ function foo(ctx) {
   return new Promise((resolve, reject) => {
 
     let { advisor } = ctx.params 
-    console.log(`Advisor: ${advisor}`)
+
     const sql = `
       SELECT 
-        a.first_name,
-        a.last_name,
-        a.email,
-        a.lock_time,
-        ab.session_length,
-        ads.start_time,
-        ads.approved,
-        ads.booked
-        FROM Advisor a
-        LEFT JOIN AdvisingBlock ab ON
-          a.advisor_id = ab.advisor_id 
-        LEFT JOIN AdvisingSession ads ON 
-          ab.advisor_id = ads.advisor_id
-        WHERE a.advisor_id = ? AND ads.start_time < NOW()
-          ORDER BY ads.start_time ASC ;`;
+      a.first_name,
+      a.last_name,
+      a.email,
+      a.lock_time,
+      ab.session_length,
+      ads.start_time,
+      ads.approved,
+      ads.booked,
+      ads.lookup_key
+      FROM Advisor a
+      LEFT JOIN AdvisingBlock ab ON
+        a.advisor_id = ab.advisor_id 
+      LEFT JOIN AdvisingSession ads ON 
+        ab.advisor_id = ads.advisor_id
+      WHERE a.advisor_id = ? AND ads.start_time < NOW()
+        ORDER BY ads.start_time ASC `;
     dbConnection.query({ sql, values: [ advisor ] }, (err, result) => {
       if (err) {
           console.log("err")
           console.log(err)
           return reject()
       }
+      // console.log("result is")
+      // console.log(result)
       ctx.body = result;
+      return resolve()
+    })
+  });
+}
+
+
+function book(ctx) {
+  
+  return new Promise((resolve, reject) => {
+
+    /*{
+      student_id: Number,
+      advisor_id: Number,
+      lookup_key: String
+    }*/
+
+    let { request: { body } } = ctx
+    console.log(body.student_id)
+    console.log(body.advisor_id)
+
+    let {
+      advisor_id, /*Number*/
+      student_id, /*Number*/
+      lookup_key /*String*/} = body
+    // { success: true }
+    // { success: false }
+
+      /*update AdvisingSession SET
+      student_id = {}}, booked = true 
+      WHERE  advisor_id = 12345 
+      AND lookup_key = "776e76695da88accf9adb19faaeb25cfae53c48f";`
+      */
+
+    const sql = `
+      update AdvisingSession SET
+      student_id = ?, booked = true 
+      WHERE  advisor_id = ? 
+      AND lookup_key = ?;`;
+
+    dbConnection.query({ sql, values: [student_id, advisor_id, lookup_key] }, err => {
+      if (err) {
+          ctx.body = { success: false }
+          console.log("err")
+          console.log(err)
+          return reject()
+      }
+      // console.log("result is")
+      // console.log(result)
+      //ctx.body = result;
+      ctx.body = { success: true }
       return resolve()
     })
   });
@@ -52,6 +105,7 @@ router
   .post('/loginAdvisee', LoginController.loginAdvisee)
   .post('/loginAdvisor', LoginController.loginAdvisor)
   .get('/advisingSession/:advisor', foo)
-
+  .post('/advisingSession/book', book)
 
 module.exports = router
+

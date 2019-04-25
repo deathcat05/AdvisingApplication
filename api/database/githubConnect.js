@@ -6,7 +6,8 @@ let connection = mysql.createConnection({
 	port: 3306,
 	user: 'cs386_nkamm',
 	password:'ka3287',
-	database: 'cs386_nkamm'
+	database: 'cs386_nkamm',
+	// timezone: 'PDT'
 });
 
 module.exports = connection;
