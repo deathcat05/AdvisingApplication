@@ -52,11 +52,15 @@ class Register extends Component {
 
     state = {
         isAdvisor: false,
-        password: "",
+        h_password: "",
         confirm_password: "",
         id: "",
-        confirm_id: ""
-
+        confirm_id: "",
+        first_name: "",
+        last_name: "",
+        email: "",
+        advisor_id: "",
+        student_id: ""
     };
 
     handleSwitch = (event) => {
@@ -83,10 +87,13 @@ class Register extends Component {
         }
 
 
-        axios.post(`http://blue.cs.sonoma.edu:60000/v1/${isAdvisor ? 'loginAdvisor' : 'loginAdvisee'}`, {
+        axios.post(`http://blue.cs.sonoma.edu:60000/v1/${isAdvisor ? 'createAdvisor' : 'createAdvisee'}`, {
             student_id: parseInt(id),
             advisor_id: parseInt(id),
-            h_password: password
+            h_password: this.state.h_password,
+            first_name: this.state.first_name,
+            last_name: this.state.last_name,
+            email: this.state.email
         }, config).then(result => console.log(result))
 
         event.preventDefault()
@@ -119,12 +126,12 @@ class Register extends Component {
         onChange={event => this.setState({ID: event.target.value})}
         />
         <Input
-        placeholder="CONFIRM ID"
-        id="confirm_ID"
-        name="confirm_ID"
+        placeholder="EMAIL"
+        id="email"
+        name="email"
         autoFocus
-        value = {this.state.confirm_id}
-        onChange={event => this.setState({confirm_id: event.target.value})}
+        value = {this.state.email}
+        onChange={event => this.setState({email: event.target.value})}
         />
         </FormControl>
         <FormControl margin="normal" required fullWidth>
@@ -135,7 +142,7 @@ class Register extends Component {
         name="password"
         type="password"
         id="password"
-        onChange={event => this.setState({ password: event.target.value })}
+        onChange={event => this.setState({ h_password: event.target.value })}
         />
         </FormControl>
         <FormControl margin="normal" required fullWidth>
@@ -148,15 +155,38 @@ class Register extends Component {
         onChange={event => this.setState({ confirm_password: event.target.value })}
 
         />
+            <FormControl
+                margin="normal"
+                >
+                <InputLabel>First Name</InputLabel>
+                <Input
+                    margin="normal"
+                    name="first_name"
+                    id="first_name"
+                    value={this.state.first_name}
+                    placeholder="First Name"
+                    >
+                </Input>
+            </FormControl>
+            <FormControl>
+                <InputLabel >Last Name</InputLabel>
+                <Input
+                    margin="normal"
+                    name="last_name"
+                    id="last_name"
+                    value={this.state.last_name}
+                    placeholder="Last Name"
+                >
+                </Input>
+            </FormControl>
         </FormControl>
         <FormControlLabel
-        control={<Switch value="remember" color="primary" />}
+        control={<Switch value="remember" color="primary" disabled_color="secondary"/>}
         onClick={this.handleSwitch}
         label={this.state.isAdvisor ? "Student":"Advisor"}
         />
         <Button
-        disabled={this.state.ID !== this.state.confirm_id || this.state.password !== this.state.confirm_password
-                || this.state.ID === "" || this.state.password === ""}
+        disabled={this.state.h_password !== this.state.confirm_password}
         type="submit"
         fullWidth
         variant="contained"
