@@ -57,14 +57,23 @@ class AdvisingController {
             WHERE  advisor_id = ? 
             AND lookup_key = ?;`;
       
-          dbConnection.query({ sql, values: [student_id, advisor_id, lookup_key] }, err => {
+          dbConnection.query({ sql, values: [student_id, advisor_id, lookup_key] }, (err, values) => {
             if (err) {
                 ctx.body = { success: false }
                 console.log("err")
                 console.log(err)
                 return reject()
             }
-            ctx.body = { success: true }
+            console.log(values)
+            let { changedRows } = values 
+
+            console.log(`Changed Rows: ${changedRows}`)
+            if (  changedRows  == 1){
+              ctx.body = { success: true }
+            }
+            else{
+              ctx.body = { success: false }
+            }
             return resolve()
           })
         });
