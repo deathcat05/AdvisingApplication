@@ -46,6 +46,55 @@ function foo(ctx) {
   });
 }
 
+function book(ctx) {
+  
+  return new Promise((resolve, reject) => {
+
+    /*{
+      student_id: Number,
+      advisor_id: Number,
+      lookup_key: String
+    }*/
+
+    let { request: { body } } = ctx
+    console.log(body.student_id)
+    console.log(body.advisor_id)
+
+    let {
+      advisor_id, /*Number*/
+      student_id, /*Number*/
+      lookup_key /*String*/} = body
+    // { success: true }
+    // { success: false }
+
+      /*update AdvisingSession SET
+      student_id = {}}, booked = true 
+      WHERE  advisor_id = 12345 
+      AND lookup_key = "776e76695da88accf9adb19faaeb25cfae53c48f";`
+      */
+
+    const sql = `
+      update AdvisingSession SET
+      student_id = ?, booked = true 
+      WHERE  advisor_id = ? 
+      AND lookup_key = ?;`;
+
+    dbConnection.query({ sql, values: [student_id, advisor_id, lookup_key] }, err => {
+      if (err) {
+          ctx.body = { success: false }
+          console.log("err")
+          console.log(err)
+          return reject()
+      }
+      // console.log("result is")
+      // console.log(result)
+      //ctx.body = result;
+      ctx.body = { success: true }
+      return resolve()
+    })
+  });
+}
+
 router
   .get('/', ctx => ctx.body = 'Hello Thomas')
   .post('/createBlock', CreateController.blockHandler)
@@ -54,6 +103,6 @@ router
   .post('/loginAdvisee', LoginController.loginAdvisee)
   .post('/loginAdvisor', LoginController.loginAdvisor)
   .get('/advisingSession/:advisor', foo)
-
+  .post('/advisingSession/book', book)
 
 module.exports = router
