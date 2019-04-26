@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-export default function WithAuth(ComponentToBeRendered) {
+export default function withAuth(ComponentToBeRendered) {
   class Authenticated extends Component {
     componentWillMount() {
       if (!this.props.isAuthenticated) {

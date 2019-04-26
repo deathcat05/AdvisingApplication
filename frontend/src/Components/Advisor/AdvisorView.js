@@ -21,7 +21,7 @@ import { StudentList, StudentPending } from './StudentList'
 import NewBlockForm  from './NewBlockForm'
 import CalendarComponent from './Calendar'
 
-import { logout } from '../store/actions/auth'
+import { logout } from '../../store/actions/auth'
 
 const styles = {
     root: {
