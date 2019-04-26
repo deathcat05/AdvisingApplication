@@ -19,10 +19,10 @@ export function configureStore() {
 const store = configureStore()
 
 
-store.subscribe(value => {
-  console.log("Store Value")
-  console.log(value)
-})
+// store.subscribe(value => {
+//   console.log("Store Value")
+//   console.log(value)
+// })
 
 
 export default store;
