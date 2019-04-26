@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,7 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import SingleLineGridList from './GridList'
-import StudentList from './StudentList'
+import { StudentList, StudentPending } from './StudentList'
+import NewBlockForm  from './NewBlockForm'
 
 const styles = {
     root: {
@@ -56,13 +58,13 @@ const styles = {
       },
 };
 
-function ButtonAppBar({ styles }) {
+function ButtonAppBar({ styles, first_name, last_name }) {
     return (
         <div className={styles.root}>
             <AppBar position="static">
                 <Toolbar>
                 <Typography variant="h6" color="inherit" className={styles.grow}>
-                    Advisor Portal - Welcome {'{{ advisorname }}'}
+                    Advisor Portal - {`${first_name} ${last_name}`}
                 </Typography>
                 
                 <Link to="/main" className={styles.btnClr}>
@@ -86,9 +88,14 @@ class AdvisorView extends Component {
 
         const { classes } = this.props
         const { upcomingAppointments } = this.state
+        const { first_name, last_name } = this.props
         return (
             <div>
-                <ButtonAppBar styles={classes}/>
+                <ButtonAppBar 
+                    styles={classes} 
+                    first_name={first_name} 
+                    last_name={last_name} 
+                />
                 <div style={{ display: 'flex' }}>
                     <div style={{ 
                         display: 'flex', 
@@ -119,7 +126,33 @@ class AdvisorView extends Component {
                     <SingleLineGridList upcoming={upcomingAppointments} />
                 </div>
                 <div className={classes.flexBox}>
-                    <div style={{backgroundColor: 'pink', flex: 4}}>foo</div>
+                    <div 
+                        style={{ 
+                            backgroundColor: '', 
+                            border: '1px solid black',
+                            margin: '10px',flex: 1 
+                    }}>
+                        <p
+                            style={{ 
+                                display: 'flex', 
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                paddingBottom: '10px',
+                                textTransform: 'uppercase',
+                                borderBottom: '1px solid black'
+                        }}> 
+                            Apt Requests 
+                        </p>
+                        <StudentPending />
+                    </div>
+                    <div style={{backgroundColor: '', flex: 4, display: 'flex', flexDirection: 'column'}}>
+                        <div style={{ backgroundColor: '', flex: 1 }}>
+                            <NewBlockForm /> 
+                        </div>
+                        <div style={{ backgroundColor: 'blue', flex: 2 }}>
+                            lower
+                        </div>
+                    </div>
                     <div style={{ 
                         backgroundColor: '', 
                         border: '1px solid black',
@@ -146,5 +179,10 @@ class AdvisorView extends Component {
     }
 }
 
+function mapStateToProps({ userReducer: { user } }) {
 
-export default withStyles(styles)(AdvisorView);
+    let { first_name, last_name } = user
+    return { first_name, last_name }
+}
+
+export default connect(mapStateToProps, {})(withStyles(styles)(AdvisorView))
