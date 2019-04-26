@@ -57,7 +57,7 @@ class CalendarComponent extends Component {
         startAccessor="start_time"
         endAccessor="end_time"
         resourceAccessor="lookup_key"
-        style={{height: '100vh'}}
+        style={{ height: '70.5vh'}}
         onSelectEvent={event => console.log(event)}
         // selected={this.state.selected}
     />

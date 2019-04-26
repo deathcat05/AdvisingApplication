@@ -3,12 +3,10 @@
 import React, { Component } from 'react'
 
 import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
-import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
+
 import { withStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 
-import Button from '@material-ui/core/Button';
 
 /*
 advisor_id,
@@ -51,11 +49,7 @@ class NewBlockForm extends Component {
 
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'column', height: '100%', marginTop: '10px', border: '1px solid black' }}>
-                    <div
-                        style={{ marginTop: '5px', textTransform: 'uppercase', fontSize: '1.3em' }}> 
-                        Create Block 
-                    </div>
+                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'column', height: '100%', marginTop: '10px' }}>
                     <div style={{ display: 'flex'}}>
                         <DatePicker
                             margin="normal"
@@ -74,11 +68,12 @@ class NewBlockForm extends Component {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <FormControl className={classes.formControl} style={{ margin: '20px' }}>
-                            <InputLabel htmlFor="session-length-native-simple">Session L</InputLabel>
+                            <InputLabel htmlFor="session-length-native-simple">Session Length</InputLabel>
                             <Select
                                 native
                                 value={this.state.sessionLength}
                                 onChange={this.handleChange('sessionLength')}
+                                style={{ width: '130px' }}
                                 inputProps={{
                                 name: 'Session Length',
                                 id: 'session-length-native-simple',
@@ -91,11 +86,13 @@ class NewBlockForm extends Component {
                             </Select>
                         </FormControl>
                         <FormControl className={classes.formControl} style={{ margin: '20px' }}>
-                            <InputLabel htmlFor="age-native-simple"># Sess</InputLabel>
+                            <InputLabel htmlFor="age-native-simple"># Sessions</InputLabel>
                             <Select
                                 native
+                                autoWidth={false}
                                 value={this.state.numSession}
                                 onChange={this.handleChange('numSession')}
+                                style={{ width: '100px' }}
                                 inputProps={{
                                 name: '#asdfasdfas',
                                 id: 'age-native-simple',
@@ -103,15 +100,12 @@ class NewBlockForm extends Component {
                             >
                                 {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((item, idx) => {
                                     if ( idx == 0)
-                                        return <option value="" />
+                                        return <option key={idx} value="" />
 
-                                    return <option value={item}>{item}</option>
+                                    return <option key={idx} value={item}>{item}</option>
                                 })}
                             </Select>
                         </FormControl>
-                        <Button variant="contained" color="primary" style={{ fontSize: '10px' }}>
-                            Create
-                        </Button>
                     </div>
                 </div>
             </MuiPickersUtilsProvider>

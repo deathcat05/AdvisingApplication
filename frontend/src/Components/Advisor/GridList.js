@@ -47,7 +47,6 @@ const styles = theme => ({
 
 
 function SimpleCard({ styles, data, upcoming }) {
-console.log(data)
     return (
       <Card className={styles.card}>
         <CardContent>
@@ -115,8 +114,8 @@ function SingleLineGridList(props) {
   return (
     <div className={classes.root}>
       <GridList className={classes.gridList} cols={2.5}>
-        {tileData.map(tile => (
-            <SimpleCard styles={classes} data={tile} upcoming={upcoming}/>
+        {tileData.map((tile, idx) => (
+            <SimpleCard key={idx} styles={classes} data={tile} upcoming={upcoming}/>
         ))}
       </GridList>
     </div>
@@ -124,27 +123,6 @@ function SingleLineGridList(props) {
 }
 
 
-{/* <div className={classes.root}>
-<GridList className={classes.gridList} cols={2.5}>
-  {tileData.map(tile => (
-    <GridListTile key={tile.img}>
-      <img src={tile.img} alt={tile.title} />
-      <GridListTileBar
-        title={tile.title}
-        classes={{
-          root: classes.titleBar,
-          title: classes.title,
-        }}
-        actionIcon={
-          <IconButton>
-            <StarBorderIcon className={classes.title} />
-          </IconButton>
-        }
-      />
-    </GridListTile>
-  ))}
-</GridList>
-</div> */}
 SingleLineGridList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
