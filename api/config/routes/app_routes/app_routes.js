@@ -13,6 +13,22 @@ const appRouter = require('koa-router')({
     prefix: '/v1'
 });
 
+
+appRouter.post('/advisingSession/approve', AdvisingController.genericUpdatePassQuery.bind({
+    query: `UPDATE AdvisingSession SET approved = true WHERE advisor_id = ? AND lookup_key = ?`,
+    filler: ['advisor_id', 'lookup_key']
+}))
+
+appRouter.post('/advisingSession/book', AdvisingController.genericUpdatePassQuery.bind({
+  query: `UPDATE AdvisingSession SET student_id = ?, booked = true WHERE  advisor_id = ? AND lookup_key = ?;`,
+  filler: ['student_id', 'advisor_id', 'lookup_key']
+}))
+
+appRouter.put('/advisingSession/comments', AdvisingController.genericUpdatePassQuery.bind({
+  query: `UPDATE AdvisingSession SET comments = ? where advisor_id = ? AND lookup_key = ?`,
+  filler: ['comments', 'advisor_id', 'lookup_key']
+}))
+
 appRouter
   .post('/createBlock', CreateController.blockHandler)
   .post('/createAdvisor', CreateController.createAdvisor)
@@ -20,6 +36,5 @@ appRouter
   .post('/loginAdvisee', LoginController.loginAdvisee)
   .post('/loginAdvisor', LoginController.loginAdvisor)
   .get('/advisingSession/:advisor', AdvisingController.advisorSession)
-  .post('/advisingSession/book', AdvisingController.book)
 
 module.exports = appRouter

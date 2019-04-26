@@ -1,8 +1,10 @@
 const dbConnection = require('../../database/mySQLconnect');
 
-class AdvisingController {
+const Controller = require('./Controller')
 
-    constructor () { console.log('Constructor called for AdvisingController') }
+class AdvisingController extends Controller{
+
+    constructor () { super(); console.log('Constructor called for AdvisingController') }
 
     advisorSession(ctx) {
         return new Promise((resolve, reject) => {
@@ -39,45 +41,6 @@ class AdvisingController {
         });
       }
 
-    book(ctx) {
-        return new Promise((resolve, reject) => {
-      
-          let { request: { body } } = ctx
-          console.log(body.student_id)
-          console.log(body.advisor_id)
-      
-          let {
-            advisor_id, /*Number*/
-            student_id, /*Number*/
-            lookup_key /*String*/} = body
-      
-          const sql = `
-            update AdvisingSession SET
-            student_id = ?, booked = true 
-            WHERE  advisor_id = ? 
-            AND lookup_key = ?;`;
-      
-          dbConnection.query({ sql, values: [student_id, advisor_id, lookup_key] }, (err, values) => {
-            if (err) {
-                ctx.body = { success: false }
-                console.log("err")
-                console.log(err)
-                return reject()
-            }
-            console.log(values)
-            let { changedRows } = values 
-
-            console.log(`Changed Rows: ${changedRows}`)
-            if (  changedRows  == 1){
-              ctx.body = { success: true }
-            }
-            else{
-              ctx.body = { success: false }
-            }
-            return resolve()
-          })
-        });
-      }
 }
 
 module.exports = AdvisingController

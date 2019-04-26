@@ -1,12 +1,14 @@
 const dbConnection = require('../../database/mySQLconnect');
-const GenericSQL = require('./GenericSQL')
+const Controller = require('./Controller')
 const sha1 = require('sha1');
 const moment = require('moment')
+const bcrypt = require('bcrypt')
 
+console.log(Controller)
 
 require('dotenv').config();
 
-class Create extends GenericSQL {
+class Create extends Controller {
 
     constructor() { super() }
 
@@ -31,34 +33,6 @@ class Create extends GenericSQL {
             
        })
     }
-
-    // static async createSession(
-    //     advisor_id, /* Number */
-    //     duration,   /* Number */
-    //     start_time, /* String / DateTime */
-    // ) {
-    //     const data = {
-    //         tableName: 'AdvisingSession',
-    //         argumentNameList: ['advisor_id', 'duration', 'start_time', 'lookup_key'],
-    //         values: [ ...arguments, sha1(`${advisor_id}${start_time}`) ]
-    //     }
-    //     return await GenericSQL.genericInsert(data)
-    // }
-
-    // static async createBlock({
-    //     advisor_id,         /* Number */
-    //     start_day,          /* String / DateTime */
-    //     session_length,     /* Number */
-    //     num_sessions_in_day /* Number */
-    // }) {
-    //     const data = {
-    //         tableName: 'AdvisingBlock',
-    //         argumentNameList: ['advisor_id', 'start_day', 'session_length', 'num_sessions_in_day'],
-    //         values: [...arguments]
-    //     }
-    //     console.log(data)
-    //     return await GenericSQL.genericInsert(data)
-    // }
 
     static async createBlock({
         advisor_id,
@@ -109,32 +83,52 @@ class Create extends GenericSQL {
         })
     }
 
-    createAdvisor(ctx) {
-        return new Promise((resolve, reject) => {
-            let { request: { body } } = ctx
+    async createAdvisor(ctx) {
+        // return new Promise((resolve, reject) => {
+        //     let { request: { body } } = ctx
 
-            const query = `
-                INSERT INTO Advisor 
-                    (advisor_id, first_name, last_name, h_password, email)
-                VALUES
-                    (?, ?, ?, ?, ?);
-                `
-            dbConnection.query({
-                sql: query,
-                values: Object.keys(body).map(k => body[k])
-            }, (error, tuples) => {
-                if (error) {
-                    console.log(error)
-                    return reject ("Error In createAdvisor")
-                }
-                ctx.body = { "success": true, ...tuples }
-                ctx.status = 200
-                return resolve()
+        //     const query = `
+        //         INSERT INTO Advisor 
+        //             (advisor_id, first_name, last_name, h_password, email)
+        //         VALUES
+        //             (?, ?, ?, ?, ?);
+        //         `
+        //     dbConnection.query({
+        //         sql: query,
+        //         values: Object.keys(body).map(k => body[k])
+        //     }, (error, tuples) => {
+        //         if (error) {
+        //             console.log(error)
+        //             return reject ("Error In createAdvisor")
+        //         }
+        //         ctx.body = { "success": true, ...tuples }
+        //         ctx.status = 200
+        //         return resolve()
+        //     })
+        // }).catch(err => {
+        //     console.log(err)
+        //     ctx.body = { "success": false}
+        // })
+        try {
+            console.log(this)
+            let { request: { body } } = ctx 
+            let argumentNameList = ['advisor_id', 'first_name', 'last_name', 'h_password', 'email']
+            let values = [body.advisor_id, body.first_name, body.last_name, bcrypt.hashSync(body.h_password, 10).slice(0, 20), body.email]
+
+            const data = await Controller.genericInsert({
+                tableName: 'Advisor',
+                argumentNameList,
+                values
             })
-        }).catch(err => {
-            console.log(err)
-            ctx.body = { "success": false}
-        })
+
+            ctx.body = { success: true }
+
+            console.log("data is ", data)
+        } catch (e) {
+            console.log('monkaS')
+            console.log(e)
+            ctx.body = { success: false }
+        } 
     }
 
     async createAdvisee(ctx) {

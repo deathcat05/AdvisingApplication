@@ -6,21 +6,22 @@ class Controller {
 
   constructor () { console.log('Constructor called for Base Class') }
 
-  static getTime(time) { new Date().getMilliseconds() - time.getMilliseconds() }
+  static getTime(time) { return new Date().getMilliseconds() - time.getMilliseconds() }
 
   static formatBodySuccess(startTime, tuples) {
+  
     return {
       'success': true,
       'timeElapsed': Controller.getTime(startTime),
-      'count': tuples.length,
+      'count': tuples.length || 0,
       'data': tuples
     }
   }
 
-  static formatBodyError(startTime, error) {
+  static formatBodyError(startTime, error = {}) {
     return {
       'success': false,
-      'timeElapsed': Controller.getTime(startTime),
+      'timeElapsed': `${Controller.getTime(startTime)}ms`,
       error
     }
   }
@@ -113,6 +114,78 @@ class Controller {
       })
     })
   }
+
+  genericUpdatePassQuery(ctx) {
+    return new Promise((resolve, reject) => {
+
+      let startTime = new Date()
+
+      let { request: { body } } = ctx
+      let { query, filler } = this
+
+      dbConnection.query({
+        sql: query,
+        values: filler.map(v => body[v])
+      }, (error, results) => {
+        if (error) {
+          ctx.body = Controller.formatBodyError(startTime)
+          return reject()
+        }
+
+        let { changedRows } = results 
+
+        if ( changedRows == 1 ) {
+          ctx.body = Controller.formatBodySuccess(startTime, {})
+        } else {
+          ctx.body = Controller.formatBodyError(startTime)
+        }
+        return resolve()
+      })
+    })
+  }
+
+  static async genericInsert({
+    tableName,        /* String */
+    argumentNameList, /* Array<String> */
+    values            /* Array<Arguments> */
+  }) {
+
+      return new Promise((resolve, reject) => {
+          
+          const argNameList = argumentNameList.map((item, idx) => {
+              if ( idx === argumentNameList.length - 1)
+                  return `${item}`
+              return `${item}, `
+          }).join('')
+
+          const variadicList = argumentNameList.map((item, idx) => {
+              if ( idx === argumentNameList.length - 1)
+                  return `?`
+              return `?, `
+          }).join('')
+
+          const sql = `
+              INSERT INTO ${tableName}
+                  ( ${argNameList} )
+              VALUES
+                  ( ${variadicList} )`
+          console.log(sql)
+          dbConnection.query({ sql, values }, (error, tuples) => {
+              if (error) {
+                  console.log(error)
+                  return reject()
+
+              }
+              return resolve(tuples)
+          })
+      })
+  }
+
+  // GenericSQL.genericInsert({
+//     tableName: 'Advisee',
+//     argumentNameList: ['student_id', 'first_name', 'last_name', 'h_password', 'email'],
+//     values: [ 150000, 'Joe', 'Schmo', 'asdfasdf', 'joeSchmo@yahoo.com' ]
+// })
 }
 
 module.exports = Controller

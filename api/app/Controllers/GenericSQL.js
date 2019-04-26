@@ -7,6 +7,8 @@ class GenericSQL {
 
     constructor(){}
 
+    static ping() { console.log('pong')}
+
     static async genericInsert({
         tableName,        /* String */
         argumentNameList, /* Array<String> */
@@ -31,7 +33,7 @@ class GenericSQL {
                 INSERT INTO ${tableName}
                     ( ${argNameList} )
                 VALUES
-                    ( ? )`
+                    ( ${variadicList} )`
             console.log(sql)
             dbConnection.query({ sql, values }, (error, tuples) => {
                 if (error) {
@@ -44,6 +46,14 @@ class GenericSQL {
         })
     }
 }
+
+GenericSQL.ping()
+
+// GenericSQL.genericInsert({
+//     tableName: 'Advisee',
+//     argumentNameList: ['student_id', 'first_name', 'last_name', 'h_password', 'email'],
+//     values: [ 150000, 'Joe', 'Schmo', 'asdfasdf', 'joeSchmo@yahoo.com' ]
+// })
 
 module.exports = GenericSQL
 
