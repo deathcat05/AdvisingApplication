@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -9,9 +9,19 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import SingleLineGridList from './GridList'
 import { StudentList, StudentPending } from './StudentList'
 import NewBlockForm  from './NewBlockForm'
+import CalendarComponent from './Calendar'
+
+import { logout } from '../store/actions/auth'
 
 const styles = {
     root: {
@@ -58,7 +68,42 @@ const styles = {
       },
 };
 
+function DialogComponent({ open, handleClose }) {
+    return (
+        <Dialog
+        open={open > 0 ? true : false}
+        onClose={() => /*handleClose(false)*/ {}}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Create Block</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To create a new advising block - please fill in this form and submit!
+          </DialogContentText>
+          <NewBlockForm />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose(0)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleClose(0)} color="primary">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )   
+}
+
 function ButtonAppBar({ styles, first_name, last_name }) {
+
+    const [ isOpen, setOpen ] = useState(0)
+
+    const onChange = (newValue, source = "null") => {
+        if ( source == "appBar" && isOpen > 0 )
+            return 
+        setOpen(newValue) 
+    }
+
     return (
         <div className={styles.root}>
             <AppBar position="static">
@@ -66,12 +111,13 @@ function ButtonAppBar({ styles, first_name, last_name }) {
                 <Typography variant="h6" color="inherit" className={styles.grow}>
                     Advisor Portal - {`${first_name} ${last_name}`}
                 </Typography>
-                
-                <Link to="/main" className={styles.btnClr}>
-                    <Button color="inherit">
-                        Logout
-                    </Button>
-                </Link>
+                <Button style={{ color: 'white' }} onClick={() => onChange(isOpen + 1, "appBar")}>
+                    Create Block
+                    <DialogComponent open={isOpen} handleClose={onChange} />
+                </Button>
+                <Button component={Link} to="/signIn" style={{ color: 'white' }} onClick={() => logout()}> 
+                    Logout
+                </Button>
                 </Toolbar>
             </AppBar>
         </div>
@@ -85,6 +131,8 @@ class AdvisorView extends Component {
     }
 
     render() {
+
+        console.log(this.props)
 
         const { classes } = this.props
         const { upcomingAppointments } = this.state
@@ -145,17 +193,14 @@ class AdvisorView extends Component {
                         </p>
                         <StudentPending />
                     </div>
-                    <div style={{backgroundColor: '', flex: 4, display: 'flex', flexDirection: 'column'}}>
-                        <div style={{ backgroundColor: '', flex: 1 }}>
-                            <NewBlockForm /> 
-                        </div>
-                        <div style={{ backgroundColor: 'blue', flex: 2 }}>
-                            lower
-                        </div>
+                    <div style={{backgroundColor: '', flex: 4, display: 'flex', flexDirection: 'column', paddingTop: '10px' }}>
+                        <CalendarComponent />
+                        
                     </div>
                     <div style={{ 
                         backgroundColor: '', 
                         border: '1px solid black',
+                        borderBottom: '5px solid black',
                         margin: '10px',
                         flex: 1
                     }}>

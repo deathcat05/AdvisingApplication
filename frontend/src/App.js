@@ -8,6 +8,7 @@ import AdvisorView from './Components/AdvisorView'
 import { Provider } from 'react-redux'
 import store from './store'
 
+import WithAuth from './hoc/withAuth'
 
 import jwtDecode from 'jwt-decode'
 
@@ -21,10 +22,6 @@ import {
   setAuthorizationToken,
   setCurrentUser
 } from './store/actions/auth'
-
-// const store = configureStore()
-
-// setInterval(() => console.log(store.getState()), 5000);
 
 if (localStorage.jwtToken) {
   console.log("yes")
@@ -45,7 +42,7 @@ class App extends Component {
           <Switch>
               <Route exact path="/signIn" component={SignIn} />
               <Route exact path="/signUpCalendar" component={SignUpCalendar} />
-              <Route exact path="/advisor" component={AdvisorView} />
+              <Route exact path="/advisor" component={WithAuth(AdvisorView)} />
               <Route exact path="/register" component={Register} />
           </Switch>
         </Router>

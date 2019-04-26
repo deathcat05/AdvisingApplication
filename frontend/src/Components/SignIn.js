@@ -93,6 +93,8 @@ class SignIn extends Component {
                 let user = jwtDecode(jwt)
                 setAuthorizationToken(jwt)
                 this.props.setCurrentUser( user )
+
+                this.props.history.push('/advisor')
             }
         })
 
