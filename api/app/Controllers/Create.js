@@ -41,7 +41,6 @@ class Create extends Controller {
         session_length,
         num_sessions_in_day
     }) {
-        console.log(`Advisor_id: ${advisor_id} .... Start_Day: ${start_day} ... Session Length: ${session_length} ... Num Sessions: ${num_sessions_in_day}`)
         return new Promise((resolve, reject) => {
             const sql = `
                 INSERT INTO AdvisingBlock

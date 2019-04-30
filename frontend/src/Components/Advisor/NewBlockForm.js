@@ -1,6 +1,7 @@
 // import 'date-fns';
 
 import React, { Component } from 'react'
+// import { connect } from 'react-redux'
 import axios from 'axios'
 
 import { withStyles } from '@material-ui/core/styles';
@@ -25,12 +26,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import Snackbar from '@material-ui/core/Snackbar';
+
+
 
 import { 
     MuiPickersUtilsProvider, 
     TimePicker, 
     DatePicker 
 } from 'material-ui-pickers';
+import { connect } from 'react-redux';
 
 
 const styles = {
@@ -44,7 +49,9 @@ class NewBlockForm extends Component {
     state = {
         selectedDate: new Date(),
         sessionLength: '',
-        numSession: ''
+        numSession: '',
+        displaySnackbar: false,
+        snackbarMessage: ""
     }
 
     handleDateChange = date => {
@@ -58,34 +65,38 @@ class NewBlockForm extends Component {
     onCreateBlock = async (event) => {
 
         let { selectedDate, sessionLength, numSession } = this.state
-        console.log(this.state)
-        // if ( !selectedDate || !sessionLength || !numSessions )
-        //     return 
 
-        console.log('hit')
         try {
 
             let { data } = await axios.post(`http://localhost:8239/v1/createBlock`, {
-                advisor_id: 12345, 
+                advisor_id: this.props.advisor_id, 
                 start_day: selectedDate,
                 session_length: parseInt(sessionLength),
                 num_sessions_in_day: parseInt(numSession)
             })
 
-            console.log(data)
-            console.log('finished')
+            let { success } = data;
+
+            if ( success ) {
+                 await this.setState({ displaySnackbar: true, snackbarMessage: 'Success!' })
+            } else {
+                await this.setState({ displaySnackbar: false, snackbarMessage: "Error :-(" })
+            }
 
         } catch (e) {
-            console.log('after')
+
         }
 
-        this.props.handleClose(0)
+        setTimeout(() => {
+            this.setState({ displaySnackbar: false, snackbarMessage: "" })
+            this.props.handleClose(0)
+        }, 500)
+        
     }
 
     render() {
-        const { classes } = this.props;
-        const { selectedDate } = this.state;
-        let { open, handleClose } = this.props 
+        const { classes, open, handleClose } = this.props;
+        const { selectedDate, displaySnackbar, snackbarMessage } = this.state;
         return (
             <Dialog
             open={open > 0 ? true : false}
@@ -147,7 +158,7 @@ class NewBlockForm extends Component {
                                 id: 'age-native-simple',
                                 }}
                             >
-                                {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((item, idx) => {
+                                {[0, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((item, idx) => {
                                     if ( idx == 0)
                                         return <option key={idx} value="" />
 
@@ -167,11 +178,29 @@ class NewBlockForm extends Component {
                 Create
               </Button>
             </DialogActions>
+            {displaySnackbar && <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                open={true}
+                autoHideDuration={300}
+                onClose={() => {}}
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">Success!</span>}
+            />}
           </Dialog>
         )
     }
 }
 
-export default withStyles(styles)(NewBlockForm);
+
+function mapStateToProps({ userReducer: { user } }) {
+    return {
+        advisor_id: user.advisor_id
+    }
+}
+
+// export default withStyles(styles)(NewBlockForm);
+export default connect(mapStateToProps)(withStyles(styles)(NewBlockForm));
 
 // export default NewBlockForm
