@@ -67,6 +67,10 @@ class AdviseeCalendar extends Component {
     })
   }
 
+  handleClose = () => {
+      this.setState({ itemSelected: false })
+  }
+
   progress = () => {
     const { spinnerCompleted } = this.state;
     this.setState({ spinnerCompleted: spinnerCompleted >= 100 ? 0 : spinnerCompleted + 4 });

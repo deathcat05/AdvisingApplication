@@ -5,11 +5,28 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ClearIcon from '@material-ui/icons/Clear';
+import Typography from '@material-ui/core/Typography';
+
+
 const styles = {
   root: {
     flexGrow: 0,
   },
 };
+
+function TabContainer({ children, dir }) {
+    return (
+      <Typography component="div" dir={dir} style={{ padding: 8 * 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {children}
+      </Typography>
+    );
+  }
+
 
 class CenteredTabs extends React.Component {
   state = {
@@ -35,6 +52,17 @@ class CenteredTabs extends React.Component {
           <Tab label="Upcoming Apt" />
           <Tab label="Pending Apt" />
         </Tabs>
+        {
+            this.state.value === 0 ? ( 
+            <TabContainer>
+                Suzanne Rivoire - 04/30/19 - 12:00:00
+                <ClearIcon />
+            </TabContainer> ) : (
+                <TabContainer>
+                    You Have No Pending Appointments 
+                </TabContainer>
+            )
+        }
       </Paper>
     );
   }
