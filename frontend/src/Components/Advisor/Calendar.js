@@ -17,16 +17,22 @@ class CalendarComponent extends Component {
   async componentWillMount() {
 
     try {
+      console.log('calendar mounting')
         const { data } = await axios.get("http://localhost:8239/v1/advisingSession/12345")
+
         const events = data.map(event => {
-            let { start_time, duration } = event
+
+            let { start_time, session_length } = event
             const d = new Date(start_time)
 
-            return { ...data,
+            return { ...event,
                 start_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss') .format('YYYY-MM-DD hh:mm:ss')),
-                end_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss').add(duration, 'minutes').format('YYYY-MM-DD hh:mm:ss'))
+                end_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss').add(session_length, 'minutes').format('YYYY-MM-DD hh:mm:ss'))
             }
+
         })
+        console.log('dumping events')
+        console.log(events)
 
         this.setState({ events })
     } catch (e) {

@@ -11,24 +11,25 @@ class AdvisingController extends Controller{
       
           let { advisor } = ctx.params 
       
-          const sql = `
-            SELECT 
-            a.first_name,
-            a.last_name,
-            a.email,
-            a.lock_time,
-            ab.session_length,
-            ads.start_time,
-            ads.approved,
-            ads.booked,
-            ads.lookup_key
-            FROM Advisor a
-            LEFT JOIN AdvisingBlock ab ON
-              a.advisor_id = ab.advisor_id 
-            LEFT JOIN AdvisingSession ads ON 
-              ab.advisor_id = ads.advisor_id
-            WHERE a.advisor_id = ? AND ads.start_time < NOW()
-              ORDER BY ads.start_time ASC `;
+          // const sql = `
+          //   SELECT 
+          //   a.first_name,
+          //   a.last_name,
+          //   a.email,
+          //   a.lock_time,
+          //   ab.session_length,
+          //   ads.start_time,
+          //   ads.approved,
+          //   ads.booked,
+          //   ads.lookup_key
+          //   FROM Advisor a
+          //   LEFT JOIN AdvisingBlock ab ON
+          //     a.advisor_id = ab.advisor_id 
+          //   LEFT JOIN AdvisingSession ads ON 
+          //     ab.advisor_id = ads.advisor_id
+          //   WHERE a.advisor_id = 12345 AND ads.start_time < NOW()
+          //     ORDER BY ads.start_time ASC `;
+          const sql = `select * from AdvisingSession WHERE advisor_id = ? and start_time < NOW()`
           dbConnection.query({ sql, values: [ advisor ] }, (err, result) => {
             if (err) {
                 console.log("err")

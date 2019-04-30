@@ -17,6 +17,7 @@ class Create extends Controller {
         duration /*Number*/, 
         start_time, /*String from Datetime*/) {
        return new Promise((resolve, reject) => {
+           console.log('CreateSession Called')
             const sql = `
                 INSERT INTO AdvisingSession 
                     (advisor_id, duration, start_time, lookup_key)
@@ -40,6 +41,7 @@ class Create extends Controller {
         session_length,
         num_sessions_in_day
     }) {
+        console.log(`Advisor_id: ${advisor_id} .... Start_Day: ${start_day} ... Session Length: ${session_length} ... Num Sessions: ${num_sessions_in_day}`)
         return new Promise((resolve, reject) => {
             const sql = `
                 INSERT INTO AdvisingBlock
@@ -48,25 +50,25 @@ class Create extends Controller {
                     (?, ?, ?, ?, ?)`
             dbConnection.query({ sql, values: [ advisor_id, false, start_day, session_length, num_sessions_in_day ]}, err => {
                 if (err)
-                    return reject('createBlock error')
+                    return reject(`createblock error.... ${err}`)
                 return resolve()
             })
         })
     }
 
     blockHandler(ctx, next) {
-        console.log(this)
-        console.log("Create Block")
         return new Promise(async (resolve, reject) => {
             try {
-
                 const dateFormat = 'YYYY-MM-DD hh:mm:ss'
                 let { request: { body } } = ctx
                 let { advisor_id, start_day, session_length, num_sessions_in_day } = body 
-                await Create.createBlock(body)
+                start_day = moment(start_day).format(dateFormat)
 
+                await Create.createBlock({ advisor_id, start_day, session_length, num_sessions_in_day })
+                console.log(`num_sessions_in_day: ${num_sessions_in_day}`)
                 for ( let i = 0; i < num_sessions_in_day; i++ ) {
                     const start_time = moment(start_day, dateFormat).add(session_length * i, 'minutes').format(dateFormat)
+                    console.log(`start_time: ${start_time}`)
                     await Create.createSession(advisor_id, session_length, start_time)
                 }
                 console.log("success")

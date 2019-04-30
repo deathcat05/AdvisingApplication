@@ -39,7 +39,7 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <Switch>
-              <Route exact path="/signIn" component={SignIn} />
+              <Route exact path="/" component={SignIn} />
               <Route exact path="/advisor" component={withAuth(AdvisorView)} />
               <Route exact path="/register" component={Register} />
           </Switch>

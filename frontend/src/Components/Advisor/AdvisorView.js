@@ -9,13 +9,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
 import SingleLineGridList from './GridList'
 import { StudentList, StudentPending } from './StudentList'
 import NewBlockForm  from './NewBlockForm'
@@ -68,31 +61,10 @@ const styles = {
       },
 };
 
-function DialogComponent({ open, handleClose }) {
-    return (
-        <Dialog
-        open={open > 0 ? true : false}
-        onClose={() => /*handleClose(false)*/ {}}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Create Block</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To create a new advising block - please fill in this form and submit!
-          </DialogContentText>
-          <NewBlockForm />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClose(0)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={() => handleClose(0)} color="primary">
-            Create
-          </Button>
-        </DialogActions>
-      </Dialog>
-    )   
-}
+
+
+
+
 
 function ButtonAppBar({ styles, first_name, last_name }) {
 
@@ -113,7 +85,7 @@ function ButtonAppBar({ styles, first_name, last_name }) {
                 </Typography>
                 <Button style={{ color: 'white' }} onClick={() => onChange(isOpen + 1, "appBar")}>
                     Create Block
-                    <DialogComponent open={isOpen} handleClose={onChange} />
+                    <NewBlockForm open={isOpen} handleClose={onChange} />
                 </Button>
                 <Button component={Link} to="/signIn" style={{ color: 'white' }} onClick={() => logout()}> 
                     Logout
