@@ -31,8 +31,8 @@ class CalendarComponent extends Component {
             }
 
         })
-        console.log('dumping events')
-        console.log(events)
+        // console.log('dumping events')
+        // console.log(events)
 
         this.setState({ events })
     } catch (e) {

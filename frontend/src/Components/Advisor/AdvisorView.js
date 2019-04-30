@@ -87,7 +87,7 @@ function ButtonAppBar({ styles, first_name, last_name }) {
                     Create Block
                     <NewBlockForm open={isOpen} handleClose={onChange} />
                 </Button>
-                <Button component={Link} to="/signIn" style={{ color: 'white' }} onClick={() => logout()}> 
+                <Button component={Link} to="/" style={{ color: 'white' }} onClick={() => logout()}> 
                     Logout
                 </Button>
                 </Toolbar>

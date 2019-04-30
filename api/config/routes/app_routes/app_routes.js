@@ -29,6 +29,14 @@ appRouter.put('/advisingSession/comments', AdvisingController.genericUpdatePassQ
   filler: ['comments', 'advisor_id', 'lookup_key']
 }))
 
+//add time heuristic later
+appRouter.get('/advisingSession/pending/:id', AdvisingController.genericSelect.bind({
+  query: `SELECT * from AdvisingSession WHERE student_id = ? and booked = true AND approved = false`,
+  url_param: ['id']
+}))
+
+
+
 appRouter
   .post('/createBlock', CreateController.blockHandler)
   .post('/createAdvisor', CreateController.createAdvisor)
