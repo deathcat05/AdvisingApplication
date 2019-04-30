@@ -45,3 +45,8 @@ class AdvisingController extends Controller{
 }
 
 module.exports = AdvisingController
+
+/*
+
+select * from AdvisingSession WHERE student_id = ? AND booked = true AND approved = false; 
+// */

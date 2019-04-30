@@ -144,6 +144,32 @@ class Controller {
     })
   }
 
+  genericSelect(ctx) {
+    console.log('hit')
+    return new Promise((resolve, reject) => {
+
+      let startTime = new Date()
+
+      let { request: { body } } = ctx
+      let { query, url_param } = this
+
+
+      dbConnection.query({
+        sql: query,
+        values: url_param.map(v => ctx.params[v])
+      }, (error, results) => {
+        if (error) {
+          ctx.body = Controller.formatBodyError(startTime)
+          return reject()
+        }
+
+        ctx.body = Controller.formatBodySuccess(startTime, results)
+
+        return resolve()
+      })
+    })
+  }
+
   static async genericInsert({
     tableName,        /* String */
     argumentNameList, /* Array<String> */
