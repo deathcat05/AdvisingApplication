@@ -14,20 +14,25 @@ const appRouter = require('koa-router')({
 });
 
 
+// Approve Appointment 
 appRouter.post('/advisingSession/approve', AdvisingController.genericUpdatePassQuery.bind({
     query: `UPDATE AdvisingSession SET approved = true WHERE advisor_id = ? AND lookup_key = ?`,
     filler: ['advisor_id', 'lookup_key']
 }))
 
+// Book Appointment
 appRouter.post('/advisingSession/book', AdvisingController.genericUpdatePassQuery.bind({
   query: `UPDATE AdvisingSession SET student_id = ?, booked = true WHERE  advisor_id = ? AND lookup_key = ?;`,
   filler: ['student_id', 'advisor_id', 'lookup_key']
 }))
 
+// Leave Comment
 appRouter.put('/advisingSession/comments', AdvisingController.genericUpdatePassQuery.bind({
   query: `UPDATE AdvisingSession SET comments = ? where advisor_id = ? AND lookup_key = ?`,
   filler: ['comments', 'advisor_id', 'lookup_key']
 }))
+
+
 
 //add time heuristic later
 appRouter.get('/advisingSession/pending/:id', AdvisingController.genericSelect.bind({
@@ -35,7 +40,22 @@ appRouter.get('/advisingSession/pending/:id', AdvisingController.genericSelect.b
   url_param: ['id']
 }))
 
+appRouter.get('/foo/:id', AdvisingController.genericSelect.bind({
+  query: `SELECT * from Advisor WHERE advisor_id = ?`,
+  url_param: ['id']
+}))
 
+//upcoming that have been approved
+appRouter.get('/advisingSession/upcoming/:id', AdvisingController.genericSelect.bind({
+  query: `SELECT * from AdvisingSession WHERE advisor_id = ? and booked = true AND approved = true AND start_time > NOW()`,
+  url_param: ['id']
+}))
+
+//past that have been approved
+appRouter.get('/advisingSession/past/:id', AdvisingController.genericSelect.bind({
+  query: `SELECT * from AdvisingSession WHERE advisor_id = ? and booked = true AND approved = true AND start_time < NOW()`,
+  url_param: ['id']
+}))
 
 appRouter
   .post('/createBlock', CreateController.blockHandler)
