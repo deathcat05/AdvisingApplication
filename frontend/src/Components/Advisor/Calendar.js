@@ -18,7 +18,7 @@ class CalendarComponent extends Component {
 
     try {
       console.log('calendar mounting')
-        const { data } = await axios.get("http://localhost:8239/v1/advisingSession/12345")
+        const { data } = await axios.get("http://localhost:3000/v1/advisingSession/12345")
 
         const events = data.map(event => {
 

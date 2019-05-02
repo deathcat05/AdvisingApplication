@@ -17,7 +17,7 @@ function combineRouters(routers) {
     routers.forEach(router => {
       let { stack } = router
       stack.forEach(({ methods, path }) => {
-        console.log(`${methods.filter(item => item !== 'HEAD')} - localhost:8239${path}`)
+        console.log(`${methods.filter(item => item !== 'HEAD')} - http://localhost:3000${path}`)
       })
       middleware.push(router.routes())
       middleware.push(router.allowedMethods())

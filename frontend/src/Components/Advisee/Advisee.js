@@ -2,9 +2,17 @@ import React, { Component } from 'react'
 import AdviseeCalendar from './AdviseeCalendar'
 import CenteredTabs from './Tabs'
 
-  
+class SelectAdvisor extends Component {
+    render() {
+        return <div />
+    }
+}
 
 class Advisee extends Component {
+
+    state = {
+        boolvalue : false
+    }
     render() {
 
         return (
@@ -17,8 +25,8 @@ class Advisee extends Component {
                     <CenteredTabs />
                 </div>
                 <div style={{ flex: 5 }}>
-                    <AdviseeCalendar />
-                </div> 
+                    {this.state.boolvalue ? <SelectAdvisor/>: <AdviseeCalendar />}
+                </div>
             </div>
         )
     }
