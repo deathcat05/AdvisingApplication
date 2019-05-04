@@ -16,6 +16,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -101,13 +102,29 @@ class FormDialog extends React.Component {
 }
 
 function SimpleCard(props) {
-    let { styles, data, upcoming } = props
+    let { styles, data, upcoming, advisor_id } = props
 
     let [shouldDisplay, setDisplay] = useState(false)
+    let [comments, updateComments] = useState('')
 
     const updateState = newValue => {
-      console.log('called, ', newValue)
       setDisplay(newValue)
+    }
+
+    const handleSubmit = async () => {
+      let oldData = data
+      try {
+        await axios.put(`http://localhost:8239/v1/advisingSession/comments`, {
+          comments,
+          advisor_id,
+          lookup_key: oldData.lookup_key
+        })
+
+      } catch (e) {
+        console.log(e)
+        console.log('monkaS')
+      }
+      setDisplay(false)
     }
 
     return (
@@ -134,18 +151,20 @@ function SimpleCard(props) {
           onClose={() => updateState(false)}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title">Comment</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              How did it go? Add a comment!
+              Notes👇🏼
             </DialogContentText>
             <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Comments"
-              type="Comments"
-              fullWidth
+              id="filled-multiline-static"
+              label="Comment"
+              multiline
+              style={{ width: '500px' }}
+              onChange={event => updateComments(event.target.value)}
+              rows="8"         
+              margin="normal"
+              variant="filled"
             />
           </DialogContent>
           <DialogActions>
@@ -154,8 +173,8 @@ function SimpleCard(props) {
             }} color="primary">
               Cancel
             </Button>
-            <Button onClick={() => updateState(false)} color="primary">
-              Subscribe
+            <Button onClick={handleSubmit} color="primary">
+              Submit
             </Button>
           </DialogActions>
         </Dialog>
@@ -235,8 +254,6 @@ class UpcomingAppointments extends Component {
       const { data } = await axios
         .get(`http://localhost:8239/v1/advisingSession/${type}/${advisor_id}`)
 
-      console.log(data)
-
       const newData = data.data.map(item => {
         return { name: "Update Join", year: "Senior", id: item.student_id, date: new Date(item.start_time).toString().slice(0, 25), lookup_key: item.lookup_key }
       })
@@ -253,52 +270,35 @@ class UpcomingAppointments extends Component {
     }
   }
 
-  // async componentDidUpdate(prevProps, prevState) {
-
-  //   // if (prevState.rerenders !== 1)
-  //     // await this.refreshAppointments()
-
-
-  //   // let { upcoming, advisor_id } = this.props
-
-  //   // const lsData = localStorage.getItem('upcomingAppointments')
-
-  //   // if ( lsData === null ) {
-  //   //   await this.refreshAppointments()
-  //   // } else {
-  //   //   let { date, data } = JSON.parse(lsData)
-
-  //   //   let convertedDate = new Date(date)
-  //   //   let hourLater = new Date()
-  //   //   hourLater.setMinutes(hourLater.getMinutes() + 20)
-
-  //   //   //Within 20 minutes we don't need to make another request
-  //   //   if (hourLater > convertedDate) {
-  //   //   } else {
-  //   //     // we need to make another request
-  //   //     await this.refreshAppointments()
-  //   //   }
-
-  //   // }
-  // }
-
   async componentWillMount(){
     await this.refreshAppointments('upcoming')
     await this.refreshAppointments('past')
   }
 
   render() {
-    const { classes, upcoming } = this.props
+    const { classes, upcoming, advisor_id } = this.props
     return (
       <div className={classes.root}>
         <GridList className={classes.gridList} cols={2.5}>
         {this.state.upcoming ?
           (this.state.upcomingAppointments.map((tile, idx) => (
-            <SimpleCard key={idx} styles={classes} data={tile} upcoming={upcoming} />
+            <SimpleCard 
+              key={idx} 
+              styles={classes} 
+              data={tile} 
+              upcoming={upcoming}
+              advisor_id={advisor_id} 
+            />
           )))
           :
           (this.state.pastAppointments.map((tile, idx) => (
-            <SimpleCard key={idx} styles={classes} data={tile} upcoming={upcoming} />
+            <SimpleCard 
+              key={idx} 
+              styles={classes} 
+              data={tile} 
+              upcoming={upcoming} 
+              advisor_id={advisor_id}
+              />
           )))
         }
         </GridList>
