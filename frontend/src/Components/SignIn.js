@@ -113,7 +113,7 @@ class SignIn extends Component {
                 <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    {this.state.isAdvisor ? "Advisor": "Advisee"} Sign in
+                    {this.state.isAdvisor ? "Advisor": "AdviseeView"} Sign in
                 </Typography>
                 <form className={classes.form}>
                 <FormControl margin="normal" required fullWidth>

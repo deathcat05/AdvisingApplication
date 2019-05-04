@@ -111,7 +111,7 @@ class Register extends Component {
             <AccountCircleTwoTone />
             </Avatar>
             <Typography component="h1" variant="h5">
-            {this.state.isAdvisor ? "Advisor": "Advisee"} Register
+            {this.state.isAdvisor ? "Advisor": "AdviseeView"} Register
         </Typography>
         <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>

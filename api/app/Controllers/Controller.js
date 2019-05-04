@@ -208,7 +208,7 @@ class Controller {
   }
 
   // GenericSQL.genericInsert({
-//     tableName: 'Advisee',
+//     tableName: 'AdviseeView',
 //     argumentNameList: ['student_id', 'first_name', 'last_name', 'h_password', 'email'],
 //     values: [ 150000, 'Joe', 'Schmo', 'asdfasdf', 'joeSchmo@yahoo.com' ]
 // })

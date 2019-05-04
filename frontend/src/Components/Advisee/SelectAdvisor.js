@@ -45,41 +45,47 @@ const styles = theme => ({
 
 //TODO:  Create Media Card and map advisors to it
 
+
 class SelectAdvisor extends Component{
 
-    state = {
-        advisors: [
-            {name:  'Ali Kooshesh', pic: './images/Kooshesh.jpeg'},
-            {name: 'Suzanne Rivoire', pic: './images/Rivoire.jpeg'},
-            {name: 'Gurman Gill', pic: './images/Gill.jpeg'},
-            {name: 'Mark Gondree', pic: './images/Gondree.jpeg'}
-        ]
-    }
-    return (
-        <div className={classes.root}>
-            <SelectAdvisor>
-            <GridList cellHeight={180} className={classes.gridList}>
-                <GridListTile {this.state.advisors.map(({ name, pic }, idx) => }}>
-                    <ListSubheader component="div">Select Advisor</ListSubheader>
-                </GridListTile>
-                {tileData.map(tile => (
-                    <GridListTile key={idx}>
-                        <img src={pic} alt={this.state.pic} />
-                        <GridListTileBar
-                            title={this.state.pic}
-                            actionIcon={
-                                <IconButton className={classes.icon}>
-                                    <PersonIcon />
-                                </IconButton>
-                            }
-                        />
-                    </GridListTile>
-                ))}
-            </GridList>
-        </SelectAdvisor>
-        </div>
-    );
-}
+        var selectAdvisor = React.createClass{
+            state = {
+                advisors: [
+                    {name:  'Ali Kooshesh', pic: './images/Kooshesh.jpeg'},
+                    {name: 'Suzanne Rivoire', pic: './images/Rivoire.jpeg'},
+                    {name: 'Gurman Gill', pic: './images/Gill.jpeg'},
+                    {name: 'Mark Gondree', pic: './images/Gondree.jpeg'}
+                ]
+            }
+
+            render: function() {
+                const selectAdvisor = 'selectAdvisor' + ele.title.importance;
+                return(
+                    <selectAdvisor>
+                       <GridList cellHeight={180} className={classes.gridList}>
+                            <GridListTile {this.state.advisors.map(({ name, pic }, idx) => }}>
+                                    <ListSubheader component="div">Select Advisor</ListSubheader>
+                            </GridListTile>
+                            {tileData.map(tile => (
+                            <GridListTile key={idx}>
+                                <img src={pic} alt={this.state.pic} />
+                                <GridListTileBar
+                                    title={this.state.pic}
+                                    actionIcon={
+                                        <IconButton className={classes.icon}>
+                                            <PersonIcon />
+                                        </IconButton>
+                                    }
+                                />
+                            </GridListTile>
+                        ))}
+                        </GridList>
+                    </selectAdvisor>
+                )}
+        });
+
+
+
 
 SelectAdvisor.propTypes = {
     classes: PropTypes.object.isRequired,

@@ -2,13 +2,8 @@ import React, { Component } from 'react'
 import AdviseeCalendar from './AdviseeCalendar'
 import CenteredTabs from './Tabs'
 
-class SelectAdvisor extends Component {
-    render() {
-        return <div />
-    }
-}
 
-class Advisee extends Component {
+class AdviseeView extends Component {
 
     state = {
         boolvalue : false
@@ -32,5 +27,5 @@ class Advisee extends Component {
     }
 }
 
-export default Advisee;
+export default AdviseeView;
 
