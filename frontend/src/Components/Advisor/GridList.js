@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
@@ -23,6 +23,7 @@ const styles = theme => ({
   },
   title: {
     color: theme.palette.primary.light,
+    fontSize: 14
   },
   titleBar: {
     background:
@@ -35,9 +36,6 @@ const styles = theme => ({
         display: 'inline-block',
         margin: '0 2px',
         transform: 'scale(0.8)',
-    },
-    title: {
-        fontSize: 14,
     },
     pos: {
         marginBottom: 12,
@@ -110,7 +108,6 @@ const tileData = [
 //but for now we will just change the text
 function SingleLineGridList(props) {
   const { classes, upcoming } = props;
-    console.log(`Upcoming is ${upcoming}`)
   return (
     <div className={classes.root}>
       <GridList className={classes.gridList} cols={2.5}>

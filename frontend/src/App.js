@@ -24,7 +24,6 @@ import {
 } from './store/actions/auth'
 
 if (localStorage.jwtToken) {
-  console.log("yes")
   setAuthorizationToken(localStorage.jwtToken)
   try {
     store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))

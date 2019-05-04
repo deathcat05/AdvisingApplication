@@ -71,7 +71,7 @@ function ButtonAppBar({ styles, first_name, last_name }) {
     const [ isOpen, setOpen ] = useState(0)
 
     const onChange = (newValue, source = "null") => {
-        if ( source == "appBar" && isOpen > 0 )
+        if ( source === "appBar" && isOpen > 0 )
             return 
         setOpen(newValue) 
     }
@@ -104,8 +104,6 @@ class AdvisorView extends Component {
 
     render() {
 
-        console.log(this.props)
-
         const { classes } = this.props
         const { upcomingAppointments } = this.state
         const { first_name, last_name } = this.props
@@ -127,7 +125,7 @@ class AdvisorView extends Component {
                     }}>
                         <Button 
                             variant="contained" 
-                            color={!upcomingAppointments ? "primary" : ""} 
+                            color={!upcomingAppointments ? "primary" : "default"} 
                             className={classes.button}
                             onClick={() => this.setState({ upcomingAppointments: false })}
                         >
@@ -136,7 +134,7 @@ class AdvisorView extends Component {
 
                         <Button 
                             variant="contained" 
-                            color={upcomingAppointments ? "primary" : ""} 
+                            color={upcomingAppointments ? "primary" : "default"} 
                             className={classes.button} style={{ marginLeft: '10px', marginRight: '10px' }}
                             onClick={() => this.setState({ upcomingAppointments: true })}
                         >

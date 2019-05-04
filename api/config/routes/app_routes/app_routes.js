@@ -32,11 +32,17 @@ appRouter.put('/advisingSession/comments', AdvisingController.genericUpdatePassQ
   filler: ['comments', 'advisor_id', 'lookup_key']
 }))
 
-
-
 //add time heuristic later
 appRouter.get('/advisingSession/pending/:id', AdvisingController.genericSelect.bind({
-  query: `SELECT * from AdvisingSession WHERE student_id = ? and booked = true AND approved = false`,
+  query: `SELECT * from AdvisingSession left join Advisee on AdvisingSession.student_id = Advisee.student_id WHERE 
+  advisor_id = ? AND booked = true AND approved = false`,
+  url_param: ['id']
+}))
+
+//Terrible query that needs to search the entire database ugh oh well
+appRouter.get('/advisingSession/advisee/:id', AdvisingController.genericSelect.bind({
+  query: `select DISTINCT a.student_id, first_name, last_name, email from AdvisingSession advs left join Advisee a on a.student_id = advs.student_id where 
+  advisor_id = ? AND booked = true;`,
   url_param: ['id']
 }))
 
@@ -66,3 +72,6 @@ appRouter
   .get('/advisingSession/:advisor', AdvisingController.advisorSession)
 
 module.exports = appRouter
+
+// localhost:8239/v1/advisingSession/pending/12345
+
