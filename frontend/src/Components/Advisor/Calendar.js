@@ -23,13 +23,11 @@ class CalendarComponent extends Component {
 
             let { start_time, session_length } = event
             const d = new Date(start_time)
-
+            
             return { 
-                start_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss') .format('YYYY-MM-DD hh:mm:ss')),
+                start_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')),
                 end_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss').add(session_length, 'minutes').format('YYYY-MM-DD hh:mm:ss')),
-                ...event
             }
-
         })
 
         this.setState({ events })
