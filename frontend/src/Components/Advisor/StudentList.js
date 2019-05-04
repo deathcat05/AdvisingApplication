@@ -147,7 +147,7 @@ class PureStudentPending extends React.Component {
       <List className={classes.root}>
         {this.state.pendingAppointment.map(({ name, date, lookup_key }, idx) => (
           <ListItem key={idx} dense button >
-            <ListItemText primary={`${name} ------ ${date}`} />
+            <ListItemText primary={`${name} ${date}`} />
             <ListItemSecondaryAction>
               <span style={{color: 'green'}}>
                 <IconButton 

@@ -9,7 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import SingleLineGridList from './GridList'
+import UpcomingAppointments from './GridList'
 import { StudentList, StudentPending } from './StudentList'
 import NewBlockForm  from './NewBlockForm'
 import CalendarComponent from './Calendar'
@@ -141,7 +141,7 @@ class AdvisorView extends Component {
                             Upcoming
                         </Button>
                     </div>
-                    <SingleLineGridList upcoming={upcomingAppointments} />
+                    <UpcomingAppointments upcoming={upcomingAppointments} />
                 </div>
                 <div className={classes.flexBox}>
                     <div 

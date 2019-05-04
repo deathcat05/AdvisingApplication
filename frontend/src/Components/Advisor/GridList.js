@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux'
 import GridList from '@material-ui/core/GridList';
-
+import axios from 'axios'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -104,8 +105,6 @@ const tileData = [
     }
 ]
 
-// We will render different data
-//but for now we will just change the text
 function SingleLineGridList(props) {
   const { classes, upcoming } = props;
   return (
@@ -119,9 +118,99 @@ function SingleLineGridList(props) {
   );
 }
 
+class UpcomingAppointments extends Component {
+
+  state = {
+    upcomingAppointments: tileData,
+    pastAppointments: tileData
+  }
+
+  async refreshAppointments(type) {
+  
+    let { advisor_id } = this.props
+    try {
+      const { data } = await axios
+        .get(`http://localhost:8239/v1/advisingSession/${type}/${advisor_id}`)
+
+      const newData = data.data.map(item => {
+        return { name: "Update Join", year: "Senior", id: item.student_id, date: new Date(item.start_time).toString().slice(0, 25) }
+      })
+
+      if (type === 'upcoming')
+        this.setState({ upcomingAppointments: [...this.state.upcomingAppointments, ...newData] })
+      else 
+        this.setState({ pastAppointments: [...this.state.pastAppointments, ...newData] })
+
+    // localStorage.setItem(`${upcoming===true ? 'upcoming': 'past'}appointments`, JSON.stringify({ ...newData, date: new Date() }))
+
+    } catch (e) {
+      console.log('monkaS')
+    }
+  }
+
+  // async componentDidUpdate(prevProps, prevState) {
+
+  //   // if (prevState.rerenders !== 1)
+  //     // await this.refreshAppointments()
+
+
+  //   // let { upcoming, advisor_id } = this.props
+
+  //   // const lsData = localStorage.getItem('upcomingAppointments')
+
+  //   // if ( lsData === null ) {
+  //   //   await this.refreshAppointments()
+  //   // } else {
+  //   //   let { date, data } = JSON.parse(lsData)
+
+  //   //   let convertedDate = new Date(date)
+  //   //   let hourLater = new Date()
+  //   //   hourLater.setMinutes(hourLater.getMinutes() + 20)
+
+  //   //   //Within 20 minutes we don't need to make another request
+  //   //   if (hourLater > convertedDate) {
+  //   //   } else {
+  //   //     // we need to make another request
+  //   //     await this.refreshAppointments()
+  //   //   }
+
+  //   // }
+  // }
+
+  async componentWillMount(){
+    await this.refreshAppointments('upcoming')
+    await this.refreshAppointments('past')
+  }
+
+  render() {
+    const { classes, upcoming } = this.props
+    return (
+      <div className={classes.root}>
+        <GridList className={classes.gridList} cols={2.5}>
+        {this.state.upcoming ?
+          (this.state.upcomingAppointments.map((tile, idx) => (
+            <SimpleCard key={idx} styles={classes} data={tile} upcoming={upcoming} />
+          )))
+          :
+          (this.state.pastAppointments.map((tile, idx) => (
+            <SimpleCard key={idx} styles={classes} data={tile} upcoming={upcoming} />
+          )))
+        }
+        </GridList>
+      </div>
+    )
+  }
+
+}
+
 
 SingleLineGridList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SingleLineGridList);
+function mapStateToProps({ userReducer: { user } }) {
+  let { advisor_id } = user
+  return { advisor_id }
+}
+
+export default connect(mapStateToProps, {})(withStyles(styles)(UpcomingAppointments))
