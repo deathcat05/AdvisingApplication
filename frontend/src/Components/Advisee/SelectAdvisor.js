@@ -57,13 +57,14 @@ class SelectAdvisor extends Component{
     }
     return (
         <div className={classes.root}>
+            <SelectAdvisor>
             <GridList cellHeight={180} className={classes.gridList}>
-                <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+                <GridListTile {this.state.advisors.map(({ name, pic }, idx) => }}>
                     <ListSubheader component="div">Select Advisor</ListSubheader>
                 </GridListTile>
                 {tileData.map(tile => (
-                    <GridListTile key={this.state.pic}>
-                        <img src={this.state.pic} alt={this.state.pic} />
+                    <GridListTile key={idx}>
+                        <img src={pic} alt={this.state.pic} />
                         <GridListTileBar
                             title={this.state.pic}
                             actionIcon={
@@ -75,6 +76,7 @@ class SelectAdvisor extends Component{
                     </GridListTile>
                 ))}
             </GridList>
+        </SelectAdvisor>
         </div>
     );
 }
