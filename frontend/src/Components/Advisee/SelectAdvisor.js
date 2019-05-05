@@ -48,7 +48,7 @@ const styles = theme => ({
 
 class SelectAdvisor extends Component{
 
-        var selectAdvisor = React.createClass{
+        selectAdvisor = React.createClass{
             state = {
                 advisors: [
                     {name:  'Ali Kooshesh', pic: './images/Kooshesh.jpeg'},

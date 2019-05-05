@@ -7,7 +7,7 @@ const CreateController = new Create();
 const LoginController = new Login();
 
 const router = require('koa-router')({
-    prefix: '/v1'
+    prefix: '/'
 });
 
 // function foo(ctx) {

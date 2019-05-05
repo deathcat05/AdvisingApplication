@@ -4,7 +4,7 @@ import SignIn from './Components/SignIn'
 import Register from './Components/Register'
 import AdvisorView from './Components/Advisor/AdvisorView'
 
-import Advisee from './Components/Advisee/Advisee'
+import AdviseeView from './Components/Advisee/AdviseeView'
 import AdvisorComments from './Components/Comments'
 
 import { Provider } from 'react-redux'
@@ -47,7 +47,7 @@ class App extends Component {
 
 
               <Route exact path="/comments" component={withAuth(AdvisorComments)} />
-              <Route exact path="/advisee"  component={Advisee} />
+              <Route exact path="/advisee"  component={AdviseeView} />
 
           </Switch>
         </Router>

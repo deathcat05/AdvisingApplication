@@ -16,7 +16,7 @@ class LoginController {
             dbConnection.query(
                 {
                     sql: query,
-                    values: [ctx.params.user_id]
+                     values: [ctx.params.user_id]
                 }, (error, tuples) => {
                     if (error) {
                         return reject(error);

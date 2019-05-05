@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import AdviseeCalendar from './AdviseeCalendar'
 import CenteredTabs from './Tabs'
+import SelectAdvisor from './SelectAdvisor'
 
 
 class AdviseeView extends Component {

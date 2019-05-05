@@ -1,6 +1,4 @@
-const courseCatalogRouter = require('./routes/course_catalog/catalog_routes.js'),
-      loginRouter         = require('./routes/login/login_routes.js'),
-      courseRouter        = require('./routes/course/course_routes.js'),
+const loginRouter         = require('./routes/login/login_routes.js'),
       defaultRouter       = require('./routes/default/default_routes.js'),
       appRouter           = require('./routes/app_routes/app_routes.js');
 
@@ -29,9 +27,7 @@ function combineRouters(routers) {
 
 const router = combineRouters(
   defaultRouter,
-  courseCatalogRouter,
   loginRouter,
-  courseRouter,
   appRouter
 )
 
