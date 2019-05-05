@@ -145,7 +145,6 @@ class Controller {
   }
 
   genericSelect(ctx) {
-    console.log('hit')
     return new Promise((resolve, reject) => {
 
       let startTime = new Date()

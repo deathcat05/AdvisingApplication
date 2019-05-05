@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
@@ -7,7 +7,8 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import PersonIcon from '@material-ui/icons/Person';
-import tileData from './tileData';
+import axios from "axios";
+// import tileData from './tileData';
 
 const styles = theme => ({
     root: {
@@ -18,8 +19,8 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
     },
     gridList: {
-        width: 500,
-        height: 450,
+        width: '60vw',
+        height: '80vh',
     },
     icon: {
         color: 'rgba(255, 255, 255, 0.54)',
@@ -45,44 +46,88 @@ const styles = theme => ({
 
 //TODO:  Create Media Card and map advisors to it
 
+// class SelectAdvisor extends Component { 
+//     render() {
+//         return < div />
+//     }
+// }
+
+// export default SelectAdvisor
+
+const tileData = [
+    {
+      img: 'foo',
+      title: 'Image',
+      author: 'author',
+    }
+]
 
 class SelectAdvisor extends Component{
 
-        var selectAdvisor = React.createClass{
             state = {
                 advisors: [
-                    {name:  'Ali Kooshesh', pic: './images/Kooshesh.jpeg'},
-                    {name: 'Suzanne Rivoire', pic: './images/Rivoire.jpeg'},
-                    {name: 'Gurman Gill', pic: './images/Gill.jpeg'},
-                    {name: 'Mark Gondree', pic: './images/Gondree.jpeg'}
+                    {name:  'Ali Kooshesh - DUMMY DATA', pic: 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fnews.sonoma.edu%2Fsites%2Fnews%2Ffiles%2Ffield%2Fimage%2Fssumobileappweb.jpg&imgrefurl=https%3A%2F%2Fnews.sonoma.edu%2Farticle%2Fnew-updated-ios-ssu-app&docid=OUfppVmlcMP4hM&tbnid=YLpGxUi85taJFM%3A&vet=10ahUKEwjn2vm0qIXiAhVBxVQKHUKjDl8QMwgnKAAwAA..i&w=700&h=467&bih=1072&biw=1200&q=image%20ali%20kooshesh%20sonoma.edu&ved=0ahUKEwjn2vm0qIXiAhVBxVQKHUKjDl8QMwgnKAAwAA&iact=mrc&uact=8', advisor_id: 12345},
+                    {name: 'Suzanne Rivoire - DUMMY DATA', pic: 'https://rivoire.cs.sonoma.edu/images/smr_cropped.jpg', advisor_id: 12345},
+                    {name: 'Gurman Gill - DUMMY DATA', pic: 'https://gill.cs.sonoma.edu/images/GurmanGill.JPG', advisor_id: 12345},
+                    {name: 'Mark Gondree -- DUMMY DATA', pic: 'https://www.gondree.com/images/nps.jpg', advisor_id: 12345},
+
                 ]
             }
 
-            render: function() {
-                const selectAdvisor = 'selectAdvisor' + ele.title.importance;
+            async componentWillMount() {
+                console.log(this.props)
+                try {
+                  console.log('select advisor mounting')
+                    const { data } = await axios.get("http://localhost:8239/v1/advisee/getAllAdvisors")
+                    console.log(data);
+                    const events = data.data.map(event => {
+            
+                        let { first_name, last_name, advisor_id } = event
+            
+                        return { name: `${first_name} ${last_name}`, 
+                        advisor_id,
+                        pic: 'https://pbs.twimg.com/profile_images/935325968280907776/AcBo6zJc_400x400.jpg' } 
+            
+                    })
+            
+                    this.setState({ advisors: [...this.state.advisors, ...events] })
+
+                } catch (e) {
+                    console.log("wtf is Darin doing")
+                } 
+              }
+
+            render (){
+                let { classes } = this.props
+                // const selectAdvisor = 'selectAdvisor' + ele.title.importance;
                 return(
-                    <selectAdvisor>
-                       <GridList cellHeight={180} className={classes.gridList}>
-                            <GridListTile {this.state.advisors.map(({ name, pic }, idx) => }}>
-                                    <ListSubheader component="div">Select Advisor</ListSubheader>
+                    <div className={classes.root}>
+                   
+                       <GridList cellHeight={250} className={classes.gridList}>
+                            <GridListTile key="Subheader" cols={2} style={{height: 'auto' }}> 
+                                <ListSubheader component="div">Select An Advisor</ListSubheader>
                             </GridListTile>
-                            {tileData.map(tile => (
-                            <GridListTile key={idx}>
-                                <img src={pic} alt={this.state.pic} />
+                            {this.state.advisors.map((tile, idx) => (
+                            <GridListTile 
+                                onClick={() => this.props.history.push(`/advisee/${tile.advisor_id}`)}
+                                key={idx}
+                            >
+                                <img src={tile.pic} alt={tile.name} />
                                 <GridListTileBar
-                                    title={this.state.pic}
+                                    title={tile.name}
+                                    subtitle={<span>Select Advisor</span>}
                                     actionIcon={
                                         <IconButton className={classes.icon}>
                                             <PersonIcon />
                                         </IconButton>
-                                    }
-                                />
-                            </GridListTile>
+                                   } 
+                                ></GridListTileBar>
+                            }</GridListTile>
                         ))}
                         </GridList>
-                    </selectAdvisor>
-                )}
-        });
+                    </div>
+            )}
+                        }
 
 
 
@@ -96,7 +141,7 @@ export default withStyles(styles)(SelectAdvisor);
 
 
 
-
+//"https://randomuser.me/api/portraits/med/men/1235.jpg"
 
 
 

@@ -68,6 +68,12 @@ appRouter.get('/advisingSession/past/data/:id', AdvisingController.genericSelect
   url_param: ['id']
 }))
 
+//get all advisor info for seclect advisor
+appRouter.get('/advisee/getAllAdvisors', AdvisingController.genericSelect.bind({
+  query: 'SELECT first_name, last_name, advisor_id from Advisor',
+  url_param: []
+}))
+
 appRouter
   .post('/createBlock', CreateController.blockHandler)
   .post('/createAdvisor', CreateController.createAdvisor)

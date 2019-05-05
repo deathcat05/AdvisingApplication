@@ -35,10 +35,11 @@ class AdviseeCalendar extends Component {
   };
 
   async componentWillMount() {
-
+    
+    let { advisor_id } = this.props
     try {
       console.log('calendar mounting')
-        const { data } = await axios.get("http://localhost:3000/v1/advisingSession/12345")
+        const { data } = await axios.get(`http://localhost:8239/v1/advisingSession/${advisor_id}`)
 
         const events = data.map(event => {
 
@@ -82,7 +83,7 @@ class AdviseeCalendar extends Component {
       }, 1250)
 
       try {
-        let { data } = await axios.post(`http://localhost:3000/v1/advisingSession/book`, {
+        let { data } = await axios.post(`http://localhost:8239/v1/advisingSession/book`, {
             student_id: 1235, 
             advisor_id: this.state.selected.advisor_id,
             lookup_key: this.state.selected.lookup_key

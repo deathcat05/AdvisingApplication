@@ -9,7 +9,7 @@ class AdviseeView extends Component {
         boolvalue : false
     }
     render() {
-
+        let { match: { params: { advisor_id } } } = this.props
         return (
             <div style={{
                 display: 'flex',
@@ -20,7 +20,9 @@ class AdviseeView extends Component {
                     <CenteredTabs />
                 </div>
                 <div style={{ flex: 5 }}>
-                    {this.state.boolvalue ? <SelectAdvisor/>: <AdviseeCalendar />}
+                    <AdviseeCalendar 
+                        advisor_id={advisor_id}
+                    />
                 </div>
             </div>
         )
