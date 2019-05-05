@@ -83,6 +83,9 @@ function ButtonAppBar({ styles, first_name, last_name }) {
                 <Typography variant="h6" color="inherit" className={styles.grow}>
                     Advisor Portal - {`${first_name} ${last_name}`}
                 </Typography>
+                <Button component={Link} to="/comments" style={{ color: 'white' }}>
+                    Comments
+                </Button>
                 <Button style={{ color: 'white' }} onClick={() => onChange(isOpen + 1, "appBar")}>
                     Create Block
                     <NewBlockForm open={isOpen} handleClose={onChange} />

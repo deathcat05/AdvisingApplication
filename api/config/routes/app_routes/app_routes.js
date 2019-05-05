@@ -63,6 +63,11 @@ appRouter.get('/advisingSession/past/:id', AdvisingController.genericSelect.bind
   url_param: ['id']
 }))
 
+appRouter.get('/advisingSession/past/data/:id', AdvisingController.genericSelect.bind({
+  query: `select * from AdvisingSession aas left join Advisee aa on aas.student_id = aa.student_id where aas.booked = true AND aas.approved = true AND start_time < NOW();`,
+  url_param: ['id']
+}))
+
 appRouter
   .post('/createBlock', CreateController.blockHandler)
   .post('/createAdvisor', CreateController.createAdvisor)
