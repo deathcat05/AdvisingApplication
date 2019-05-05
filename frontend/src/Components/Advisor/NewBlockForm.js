@@ -68,7 +68,7 @@ class NewBlockForm extends Component {
 
         try {
 
-            let { data } = await axios.post(`http://localhost:8239/v1/createBlock`, {
+            let { data } = await axios.post(`http://localhost:3000/v1/createBlock`, {
                 advisor_id: this.props.advisor_id, 
                 start_day: selectedDate,
                 session_length: parseInt(sessionLength),

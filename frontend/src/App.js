@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import SignIn from './Components/SignIn'
 import Register from './Components/Register'
 import AdvisorView from './Components/Advisor/AdvisorView'
+
 import Advisee from './Components/Advisee/Advisee'
 import AdvisorComments from './Components/Comments'
 
@@ -43,8 +44,11 @@ class App extends Component {
               <Route exact path="/" component={SignIn} />
               <Route exact path="/advisor"  component={withAuth(AdvisorView)} />
               <Route exact path="/register" component={Register} />
+
+
               <Route exact path="/comments" component={withAuth(AdvisorComments)} />
               <Route exact path="/advisee"  component={Advisee} />
+
           </Switch>
         </Router>
       </Provider>

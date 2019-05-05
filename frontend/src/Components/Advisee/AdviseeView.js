@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import AdviseeCalendar from './AdviseeCalendar'
 import CenteredTabs from './Tabs'
 
-  
 
-class Advisee extends Component {
+class AdviseeView extends Component {
+
+    state = {
+        boolvalue : false
+    }
     render() {
 
         return (
@@ -17,12 +20,12 @@ class Advisee extends Component {
                     <CenteredTabs />
                 </div>
                 <div style={{ flex: 5 }}>
-                    <AdviseeCalendar />
-                </div> 
+                    {this.state.boolvalue ? <SelectAdvisor/>: <AdviseeCalendar />}
+                </div>
             </div>
         )
     }
 }
 
-export default Advisee;
+export default AdviseeView;
 
