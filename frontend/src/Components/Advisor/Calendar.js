@@ -17,42 +17,24 @@ class CalendarComponent extends Component {
   async componentWillMount() {
 
     try {
-      console.log('calendar mounting')
         const { data } = await axios.get("http://localhost:8239/v1/advisingSession/12345")
 
         const events = data.map(event => {
 
             let { start_time, session_length } = event
             const d = new Date(start_time)
-
-            return { ...event,
-                start_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss') .format('YYYY-MM-DD hh:mm:ss')),
-                end_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss').add(session_length, 'minutes').format('YYYY-MM-DD hh:mm:ss'))
+            
+            return { 
+                start_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD hh:mm:ss')),
+                end_time: new Date(moment(d, 'YYYY-MM-DD hh:mm:ss').add(session_length, 'minutes').format('YYYY-MM-DD hh:mm:ss')),
             }
-
         })
-        // console.log('dumping events')
-        // console.log(events)
 
         this.setState({ events })
     } catch (e) {
         console.log("monkaS")
     } 
   }
-
-//   onEventResize = (type, { event, start, end, allDay }) => {
-//     this.setState(state => {
-//       state.events[0].start = start;
-//       state.events[0].end = end;
-//       return { events: state.events };
-//     });
-//   };
-
-//   onEventDrop = ({ event, start, end, allDay }) => {
-//     this.setState({ events: [ { start, end, title: "foobar" } ] })
-
-//     console.log(start);
-//   };
 
   render() {
     return (
@@ -65,7 +47,6 @@ class CalendarComponent extends Component {
         resourceAccessor="lookup_key"
         style={{ height: '70.5vh'}}
         onSelectEvent={event => console.log(event)}
-        // selected={this.state.selected}
     />
       </div>
     );

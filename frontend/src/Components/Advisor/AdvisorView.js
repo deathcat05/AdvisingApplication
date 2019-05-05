@@ -9,7 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import SingleLineGridList from './GridList'
+import UpcomingAppointments from './GridList'
 import { StudentList, StudentPending } from './StudentList'
 import NewBlockForm  from './NewBlockForm'
 import CalendarComponent from './Calendar'
@@ -71,7 +71,7 @@ function ButtonAppBar({ styles, first_name, last_name }) {
     const [ isOpen, setOpen ] = useState(0)
 
     const onChange = (newValue, source = "null") => {
-        if ( source == "appBar" && isOpen > 0 )
+        if ( source === "appBar" && isOpen > 0 )
             return 
         setOpen(newValue) 
     }
@@ -83,6 +83,9 @@ function ButtonAppBar({ styles, first_name, last_name }) {
                 <Typography variant="h6" color="inherit" className={styles.grow}>
                     Advisor Portal - {`${first_name} ${last_name}`}
                 </Typography>
+                <Button component={Link} to="/comments" style={{ color: 'white' }}>
+                    Comments
+                </Button>
                 <Button style={{ color: 'white' }} onClick={() => onChange(isOpen + 1, "appBar")}>
                     Create Block
                     <NewBlockForm open={isOpen} handleClose={onChange} />
@@ -103,8 +106,6 @@ class AdvisorView extends Component {
     }
 
     render() {
-
-        console.log(this.props)
 
         const { classes } = this.props
         const { upcomingAppointments } = this.state
@@ -127,7 +128,7 @@ class AdvisorView extends Component {
                     }}>
                         <Button 
                             variant="contained" 
-                            color={!upcomingAppointments ? "primary" : ""} 
+                            color={!upcomingAppointments ? "primary" : "default"} 
                             className={classes.button}
                             onClick={() => this.setState({ upcomingAppointments: false })}
                         >
@@ -136,14 +137,14 @@ class AdvisorView extends Component {
 
                         <Button 
                             variant="contained" 
-                            color={upcomingAppointments ? "primary" : ""} 
+                            color={upcomingAppointments ? "primary" : "default"} 
                             className={classes.button} style={{ marginLeft: '10px', marginRight: '10px' }}
                             onClick={() => this.setState({ upcomingAppointments: true })}
                         >
                             Upcoming
                         </Button>
                     </div>
-                    <SingleLineGridList upcoming={upcomingAppointments} />
+                    <UpcomingAppointments upcoming={upcomingAppointments} />
                 </div>
                 <div className={classes.flexBox}>
                     <div 

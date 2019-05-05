@@ -4,6 +4,7 @@ import SignIn from './Components/SignIn'
 import Register from './Components/Register'
 import AdvisorView from './Components/Advisor/AdvisorView'
 import Advisee from './Components/Advisee/Advisee'
+import AdvisorComments from './Components/Comments'
 
 import { Provider } from 'react-redux'
 import store from './store'
@@ -24,7 +25,6 @@ import {
 } from './store/actions/auth'
 
 if (localStorage.jwtToken) {
-  console.log("yes")
   setAuthorizationToken(localStorage.jwtToken)
   try {
     store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
@@ -41,9 +41,10 @@ class App extends Component {
         <Router>
           <Switch>
               <Route exact path="/" component={SignIn} />
-              <Route exact path="/advisor" component={withAuth(AdvisorView)} />
+              <Route exact path="/advisor"  component={withAuth(AdvisorView)} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/advisee" component={Advisee} />
+              <Route exact path="/comments" component={withAuth(AdvisorComments)} />
+              <Route exact path="/advisee"  component={Advisee} />
           </Switch>
         </Router>
       </Provider>
