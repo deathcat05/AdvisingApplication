@@ -14,16 +14,19 @@ const appRouter = require('koa-router')({
 });
 
 
+// Approve Appointment 
 appRouter.post('/advisingSession/approve', AdvisingController.genericUpdatePassQuery.bind({
     query: `UPDATE AdvisingSession SET approved = true WHERE advisor_id = ? AND lookup_key = ?`,
     filler: ['advisor_id', 'lookup_key']
 }))
 
+// Book Appointment
 appRouter.post('/advisingSession/book', AdvisingController.genericUpdatePassQuery.bind({
   query: `UPDATE AdvisingSession SET student_id = ?, booked = true WHERE  advisor_id = ? AND lookup_key = ?;`,
   filler: ['student_id', 'advisor_id', 'lookup_key']
 }))
 
+// Leave Comment
 appRouter.put('/advisingSession/comments', AdvisingController.genericUpdatePassQuery.bind({
   query: `UPDATE AdvisingSession SET comments = ? where advisor_id = ? AND lookup_key = ?`,
   filler: ['comments', 'advisor_id', 'lookup_key']
@@ -31,11 +34,39 @@ appRouter.put('/advisingSession/comments', AdvisingController.genericUpdatePassQ
 
 //add time heuristic later
 appRouter.get('/advisingSession/pending/:id', AdvisingController.genericSelect.bind({
-  query: `SELECT * from AdvisingSession WHERE student_id = ? and booked = true AND approved = false`,
+  query: `SELECT * from AdvisingSession left join Advisee on AdvisingSession.student_id = Advisee.student_id WHERE 
+  advisor_id = ? AND booked = true AND approved = false`,
   url_param: ['id']
 }))
 
+//Terrible query that needs to search the entire database ugh oh well
+appRouter.get('/advisingSession/advisee/:id', AdvisingController.genericSelect.bind({
+  query: `select DISTINCT a.student_id, first_name, last_name, email from AdvisingSession advs left join Advisee a on a.student_id = advs.student_id where 
+  advisor_id = ? AND booked = true;`,
+  url_param: ['id']
+}))
 
+appRouter.get('/foo/:id', AdvisingController.genericSelect.bind({
+  query: `SELECT * from Advisor WHERE advisor_id = ?`,
+  url_param: ['id']
+}))
+
+//upcoming that have been approved
+appRouter.get('/advisingSession/upcoming/:id', AdvisingController.genericSelect.bind({
+  query: `SELECT * from AdvisingSession WHERE advisor_id = ? and booked = true AND approved = true AND start_time > NOW()`,
+  url_param: ['id']
+}))
+
+//past that have been approved
+appRouter.get('/advisingSession/past/:id', AdvisingController.genericSelect.bind({
+  query: `SELECT * from AdvisingSession WHERE advisor_id = ? and booked = true AND approved = true AND start_time < NOW()`,
+  url_param: ['id']
+}))
+
+appRouter.get('/advisingSession/past/data/:id', AdvisingController.genericSelect.bind({
+  query: `select * from AdvisingSession aas left join Advisee aa on aas.student_id = aa.student_id where aas.booked = true AND aas.approved = true AND start_time < NOW();`,
+  url_param: ['id']
+}))
 
 appRouter
   .post('/createBlock', CreateController.blockHandler)
@@ -46,3 +77,6 @@ appRouter
   .get('/advisingSession/:advisor', AdvisingController.advisorSession)
 
 module.exports = appRouter
+
+// localhost:8239/v1/advisingSession/pending/12345
+

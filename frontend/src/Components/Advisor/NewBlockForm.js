@@ -96,7 +96,7 @@ class NewBlockForm extends Component {
 
     render() {
         const { classes, open, handleClose } = this.props;
-        const { selectedDate, displaySnackbar, snackbarMessage } = this.state;
+        const { selectedDate, displaySnackbar } = this.state;
         return (
             <Dialog
             open={open > 0 ? true : false}
@@ -158,8 +158,8 @@ class NewBlockForm extends Component {
                                 id: 'age-native-simple',
                                 }}
                             >
-                                {[0, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((item, idx) => {
-                                    if ( idx == 0)
+                                {[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((item, idx) => {
+                                    if ( idx === 0 )
                                         return <option key={idx} value="" />
 
                                     return <option key={idx} value={item}>{item}</option>

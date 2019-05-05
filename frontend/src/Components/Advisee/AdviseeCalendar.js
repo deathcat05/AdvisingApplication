@@ -51,8 +51,6 @@ class AdviseeCalendar extends Component {
             }
 
         })
-        // console.log('dumping events')
-        // console.log(events)
 
         this.setState({ events })
     } catch (e) {
@@ -110,7 +108,6 @@ class AdviseeCalendar extends Component {
   }
 
   render() {
-      let { classes } = this.props
     let { selected } = this.state
     return (
       <div className="App">
