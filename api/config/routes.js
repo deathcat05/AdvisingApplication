@@ -1,6 +1,5 @@
-const courseCatalogRouter = require('./routes/course_catalog/catalog_routes.js'),
+const 
       loginRouter         = require('./routes/login/login_routes.js'),
-      courseRouter        = require('./routes/course/course_routes.js'),
       defaultRouter       = require('./routes/default/default_routes.js'),
       appRouter           = require('./routes/app_routes/app_routes.js');
 
@@ -17,7 +16,7 @@ function combineRouters(routers) {
     routers.forEach(router => {
       let { stack } = router
       stack.forEach(({ methods, path }) => {
-        console.log(`${methods.filter(item => item !== 'HEAD')} - http://localhost:3000${path}`)
+        console.log(`${methods.filter(item => item !== 'HEAD')} - http://localhost:8239${path}`)
       })
       middleware.push(router.routes())
       middleware.push(router.allowedMethods())
@@ -29,9 +28,7 @@ function combineRouters(routers) {
 
 const router = combineRouters(
   defaultRouter,
-  courseCatalogRouter,
   loginRouter,
-  courseRouter,
   appRouter
 )
 

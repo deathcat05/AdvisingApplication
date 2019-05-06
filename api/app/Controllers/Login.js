@@ -66,7 +66,7 @@ class Login extends GenericSQL {
                         last_name, 
                         email
                     } = tuples[0] 
-                    const webToken = jwt.sign({ advisor_id, first_name, last_name, email }, "SecretKey")
+                    const webToken = jwt.sign({ advisor_id, first_name, last_name, email }, "ShittySecretKey")
                     ctx.body = { "success": true, "jwt": webToken}
                     ctx.status = 200
                     return resolve()

@@ -20,7 +20,6 @@ class CalendarComponent extends Component {
 
       console.log('calendar mounting')
         const { data } = await axios.get("http://localhost:8239/v1/advisingSession/12345")
-
         const events = data.map(event => {
 
             let { start_time, session_length } = event
@@ -34,6 +33,7 @@ class CalendarComponent extends Component {
 
         this.setState({ events })
     } catch (e) {
+      console.log(e)
         console.log("monkaS")
     } 
   }

@@ -116,12 +116,18 @@ class Controller {
   }
 
   genericUpdatePassQuery(ctx) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
       let startTime = new Date()
 
       let { request: { body } } = ctx
-      let { query, filler } = this
+      let { query, filler, func } = this
+
+      if ( func !== null ) {
+        let [ toExecute, key ] = func 
+        await toExecute(ctx, key, body[key])
+      }
+
 
       dbConnection.query({
         sql: query,
@@ -145,13 +151,17 @@ class Controller {
   }
 
   genericSelect(ctx) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
       let startTime = new Date()
 
       let { request: { body } } = ctx
-      let { query, url_param } = this
+      let { query, url_param, func } = this
 
+      if ( func !== null ) {
+        let [ toExecute, key ] = func 
+        await toExecute(ctx, key, ctx.params[key])
+      }
 
       dbConnection.query({
         sql: query,
@@ -161,9 +171,7 @@ class Controller {
           ctx.body = Controller.formatBodyError(startTime)
           return reject()
         }
-
         ctx.body = Controller.formatBodySuccess(startTime, results)
-
         return resolve()
       })
     })
