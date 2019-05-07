@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-export default function withAuth(ComponentToBeRendered) {
+export default function isAdvisee(ComponentToBeRendered) {
   class Authenticated extends Component {
     componentWillMount() {
       if (!this.props.isAuthenticated) {
@@ -21,8 +21,8 @@ export default function withAuth(ComponentToBeRendered) {
   }
 
   const mapStateToProps = state => {
-    const { userReducer: { isAuthenticated } } = state
-    return { isAuthenticated }
+    const { userReducer } = state
+    return { isAuthenticated: userReducer.user.hasOwnProperty('student_id') }
   }
 
   return connect(mapStateToProps)(Authenticated)

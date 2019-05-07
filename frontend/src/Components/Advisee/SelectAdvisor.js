@@ -66,7 +66,7 @@ class SelectAdvisor extends Component{
 
             state = {
                 advisors: [
-                    {name:  'Ali Kooshesh - DUMMY DATA', pic: 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fnews.sonoma.edu%2Fsites%2Fnews%2Ffiles%2Ffield%2Fimage%2Fssumobileappweb.jpg&imgrefurl=https%3A%2F%2Fnews.sonoma.edu%2Farticle%2Fnew-updated-ios-ssu-app&docid=OUfppVmlcMP4hM&tbnid=YLpGxUi85taJFM%3A&vet=10ahUKEwjn2vm0qIXiAhVBxVQKHUKjDl8QMwgnKAAwAA..i&w=700&h=467&bih=1072&biw=1200&q=image%20ali%20kooshesh%20sonoma.edu&ved=0ahUKEwjn2vm0qIXiAhVBxVQKHUKjDl8QMwgnKAAwAA&iact=mrc&uact=8', advisor_id: 12345},
+                    {name:  'Ali Kooshesh - DUMMY DATA', pic: 'https://news.sonoma.edu/sites/news/files/field/image/ssumobileappweb.jpg', advisor_id: 12345},
                     {name: 'Suzanne Rivoire - DUMMY DATA', pic: 'https://rivoire.cs.sonoma.edu/images/smr_cropped.jpg', advisor_id: 12345},
                     {name: 'Gurman Gill - DUMMY DATA', pic: 'https://gill.cs.sonoma.edu/images/GurmanGill.JPG', advisor_id: 12345},
                     {name: 'Mark Gondree -- DUMMY DATA', pic: 'https://www.gondree.com/images/nps.jpg', advisor_id: 12345},

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
 
+import { connect } from 'react-redux'
+
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -83,8 +85,10 @@ class AdviseeCalendar extends Component {
       }, 1250)
 
       try {
+        console.log(`advisor_id: ${this.state.selected.advisor_id}`)
+        console.log(`lookup_key: ${this.state.selected.lookup_key}`)
         let { data } = await axios.post(`http://localhost:8239/v1/advisingSession/book`, {
-            student_id: 1235, 
+            student_id: parseInt(this.props.student_id), 
             advisor_id: this.state.selected.advisor_id,
             lookup_key: this.state.selected.lookup_key
         })
@@ -166,4 +170,8 @@ class AdviseeCalendar extends Component {
   }
 }
 
-export default withStyles(styles)(AdviseeCalendar);
+function mapStateToProps({ userReducer: { user: { student_id } } }) {
+  return { student_id }
+}
+
+export default connect(mapStateToProps, {})(withStyles(styles)(AdviseeCalendar))

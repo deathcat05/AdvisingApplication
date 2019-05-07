@@ -94,7 +94,10 @@ class SignIn extends Component {
                 setAuthorizationToken(jwt)
                 this.props.setCurrentUser( user )
 
-                this.props.history.push('/advisor')
+                if ( isAdvisor )
+                    this.props.history.push('/advisor')
+                else 
+                    this.props.history.push('/advisee')
             }
         })
 
