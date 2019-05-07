@@ -123,11 +123,10 @@ class Controller {
       let { request: { body } } = ctx
       let { query, filler, func } = this
 
-      if ( func !== null ) {
+      if ( func != null ) {
         let [ toExecute, key ] = func 
         await toExecute(ctx, key, body[key])
       }
-
 
       dbConnection.query({
         sql: query,
@@ -158,7 +157,7 @@ class Controller {
       let { request: { body } } = ctx
       let { query, url_param, func } = this
 
-      if ( func !== null ) {
+      if ( func != null ) {
         let [ toExecute, key ] = func 
         await toExecute(ctx, key, ctx.params[key])
       }

@@ -27,7 +27,7 @@ async function middleware(ctx, next) {
     const value = await jwt.verify(ctx.request.req.headers.authorization.substring(7), "ShittySecretKey")
     return next()
   } catch (e) {
-    ctx.throw(500, "Bad Creds")
+    ctx.throw(500, "Bad Creds Middleware")
   }
 }
 
@@ -96,6 +96,16 @@ appRouter.get('/advisingSession/upcoming/:advisor_id', middleware, AdvisingContr
   query: `SELECT * from AdvisingSession WHERE advisor_id = ? and booked = true AND approved = true AND start_time > NOW()`,
   url_param: ['advisor_id'],
   func: [checkBeforeCommit, 'advisor_id']
+}))
+
+appRouter.get('/advisingSession/student/approved/:student_id', middleware, AdvisingController.genericSelect.bind({
+  query: `select * from AdvisingSession where student_id = ? AND approved = true AND start_time > NOW();`,
+  url_param: ['student_id']
+}))
+
+appRouter.get('/advisingSession/student/pending/:student_id', middleware, AdvisingController.genericSelect.bind({
+  query: `select * from AdvisingSession where student_id = ? AND approved = false AND start_time > NOW();`,
+  url_param: ['student_id']
 }))
 
 //past that have been approved

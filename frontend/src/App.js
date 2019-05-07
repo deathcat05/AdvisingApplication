@@ -11,7 +11,8 @@ import AdvisorComments from './Components/Comments'
 import { Provider } from 'react-redux'
 import store from './store'
 
-import withAuth from './hoc/withAuth'
+import isAdvisor from './hoc/isAdvisor'
+import isAdvisee from './hoc/isAdvisee'
 
 import jwtDecode from 'jwt-decode'
 
@@ -43,13 +44,13 @@ class App extends Component {
         <Router>
           <Switch>
               <Route exact path="/" component={SignIn} />
-              <Route exact path="/advisor"  component={withAuth(AdvisorView)} />
+              <Route exact path="/advisor"  component={isAdvisor(AdvisorView)} />
               <Route exact path="/register" component={Register} />
 
 
-              <Route exact path="/comments" component={withAuth(AdvisorComments)} />
-              <Route exact path="/advisee"  component={SelectAdvisor} />
-              <Route exact path="/advisee/:advisor_id" component={AdviseeView} />
+              <Route exact path="/comments" component={isAdvisor(AdvisorComments)} />
+              <Route exact path="/advisee"  component={isAdvisee(SelectAdvisor)} />
+              <Route exact path="/advisee/:advisor_id" component={isAdvisee(AdviseeView)} />
 
           </Switch>
         </Router>
