@@ -15,6 +15,8 @@ What Works
     All routes are protected with auth - expect /login /register
     All routes changing data in SQL require further checks to make sure they can only change their own data
     We used JWT on the backend 
+    
+    I think one or two queries may have been reversed -> > time() vs < time() due to testing that are still wrong
 
 What Doesn't Work
     Its in beta....
